@@ -62,6 +62,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .rank-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0}
 .r1{background:#f0ffd6;color:#3d6b00}
 .r2{background:#f5f5f5;color:#555}
+.r3{background:#fff3e0;color:#8b4513}
+.r4{background:#f5f5f5;color:#aaa}
 .rank-name{flex:1;font-size:14px;color:#1a1a1a}
 .rank-pts{font-size:14px;font-weight:500;color:#1a1a1a}
 .coletiva-total{font-size:38px;font-weight:500;color:#82b800;margin:6px 0 4px}
@@ -72,13 +74,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .info-box{background:#fafafa;border:1px solid #e5e5e5;border-radius:8px;padding:.75rem;font-size:13px;color:#666;line-height:1.6;margin-bottom:10px}
 .hist-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:13px}
 .hist-row:last-child{border-bottom:none}
-.loading{text-align:center;padding:2rem;color:#aaa;font-size:14px}
-.undo-btn{padding:4px 10px;border:1px solid #e5e5e5;border-radius:6px;background:#fff;color:#666;font-size:12px;cursor:pointer;margin-left:8px}
+.undo-btn{padding:3px 8px;border:1px solid #e5e5e5;border-radius:5px;background:#fff;color:#666;font-size:11px;cursor:pointer;margin-left:6px}
 .undo-btn:hover{background:#fafafa}
 @media(max-width:420px){
   .person-grid{grid-template-columns:1fr}
   .service-grid{grid-template-columns:1fr}
-  .meta-row{grid-template-columns:1fr 1fr 1fr}
 }
 </style>
 </head>
@@ -86,7 +86,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div class="app">
 
 <div class="header">
-  <img src="https://raw.githubusercontent.com/tribobarbeariacentro-art/TRIBO-APP/main/logo.png" alt="Barbearia Tribo" id="logo-img" onerror="this.style.display='none';document.getElementById('logo-txt').style.display='block'">
+  <img src="https://raw.githubusercontent.com/tribobarbeariacentro-art/TRIBO-APP/main/PRIMÁRIA .png" alt="Barbearia Tribo" id="logo-img" onerror="this.style.display='none';document.getElementById('logo-txt').style.display='block'">
   <div id="logo-txt" style="display:none;font-size:22px;font-weight:600;color:#1a1a1a;margin-bottom:4px">Barbearia Tribo</div>
   <p id="mes-atual"></p>
   <div class="sync-status">
@@ -144,9 +144,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         </div>
         <div class="pts-display" id="pts-adrielle">0</div>
         <div class="pts-label">pontos no mês</div>
-        <div class="progress-wrap"><div class="progress-label"><span>Bronze</span><span>150 pts</span></div><div class="progress-bar"><div class="progress-fill pf-bronze" id="prog-adrielle-b" style="width:0%"></div></div></div>
-        <div class="progress-wrap"><div class="progress-label"><span>Prata</span><span>280 pts</span></div><div class="progress-bar"><div class="progress-fill pf-prata" id="prog-adrielle-p" style="width:0%"></div></div></div>
-        <div class="progress-wrap"><div class="progress-label"><span>Ouro</span><span>450 pts</span></div><div class="progress-bar"><div class="progress-fill pf-ouro" id="prog-adrielle-o" style="width:0%"></div></div></div>
+        <div class="progress-wrap"><div class="progress-label"><span>Bronze</span><span>220 pts</span></div><div class="progress-bar"><div class="progress-fill pf-bronze" id="prog-adrielle-b" style="width:0%"></div></div></div>
+        <div class="progress-wrap"><div class="progress-label"><span>Prata</span><span>400 pts</span></div><div class="progress-bar"><div class="progress-fill pf-prata" id="prog-adrielle-p" style="width:0%"></div></div></div>
+        <div class="progress-wrap"><div class="progress-label"><span>Ouro</span><span>650 pts</span></div><div class="progress-bar"><div class="progress-fill pf-ouro" id="prog-adrielle-o" style="width:0%"></div></div></div>
         <div id="badge-adrielle" class="badge badge-none">Sem meta</div>
       </div>
       <div class="person-card">
@@ -156,9 +156,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         </div>
         <div class="pts-display" id="pts-raiany">0</div>
         <div class="pts-label">pontos no mês</div>
-        <div class="progress-wrap"><div class="progress-label"><span>Bronze</span><span>150 pts</span></div><div class="progress-bar"><div class="progress-fill pf-bronze" id="prog-raiany-b" style="width:0%"></div></div></div>
-        <div class="progress-wrap"><div class="progress-label"><span>Prata</span><span>280 pts</span></div><div class="progress-bar"><div class="progress-fill pf-prata" id="prog-raiany-p" style="width:0%"></div></div></div>
-        <div class="progress-wrap"><div class="progress-label"><span>Ouro</span><span>450 pts</span></div><div class="progress-bar"><div class="progress-fill pf-ouro" id="prog-raiany-o" style="width:0%"></div></div></div>
+        <div class="progress-wrap"><div class="progress-label"><span>Bronze</span><span>220 pts</span></div><div class="progress-bar"><div class="progress-fill pf-bronze" id="prog-raiany-b" style="width:0%"></div></div></div>
+        <div class="progress-wrap"><div class="progress-label"><span>Prata</span><span>400 pts</span></div><div class="progress-bar"><div class="progress-fill pf-prata" id="prog-raiany-p" style="width:0%"></div></div></div>
+        <div class="progress-wrap"><div class="progress-label"><span>Ouro</span><span>650 pts</span></div><div class="progress-bar"><div class="progress-fill pf-ouro" id="prog-raiany-o" style="width:0%"></div></div></div>
         <div id="badge-raiany" class="badge badge-none">Sem meta</div>
       </div>
     </div>
@@ -167,10 +167,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="card">
     <div class="card-title">Meta coletiva da barbearia</div>
     <div class="coletiva-total" id="pts-coletiva">0</div>
-    <div class="pts-label">pontos somados (Marcus + Juan)</div>
-    <div class="progress-wrap"><div class="progress-label"><span>Bronze — R$100 cada</span><span>900 pts</span></div><div class="progress-bar"><div class="progress-fill pf-bronze" id="prog-col-b" style="width:0%"></div></div></div>
-    <div class="progress-wrap"><div class="progress-label"><span>Prata — R$200 cada</span><span>1400 pts</span></div><div class="progress-bar"><div class="progress-fill pf-prata" id="prog-col-p" style="width:0%"></div></div></div>
-    <div class="progress-wrap"><div class="progress-label"><span>Ouro — R$300 cada</span><span>2000 pts</span></div><div class="progress-bar"><div class="progress-fill pf-ouro" id="prog-col-o" style="width:0%"></div></div></div>
+    <div class="pts-label">pontos somados (Marcus + Juan + Adrielle + Raiany)</div>
+    <div class="progress-wrap"><div class="progress-label"><span>Bronze — R$25 cada</span><span>1500 pts</span></div><div class="progress-bar"><div class="progress-fill pf-bronze" id="prog-col-b" style="width:0%"></div></div></div>
+    <div class="progress-wrap"><div class="progress-label"><span>Prata — R$75 cada</span><span>2500 pts</span></div><div class="progress-bar"><div class="progress-fill pf-prata" id="prog-col-p" style="width:0%"></div></div></div>
+    <div class="progress-wrap"><div class="progress-label"><span>Ouro — R$125 cada</span><span>3800 pts</span></div><div class="progress-bar"><div class="progress-fill pf-ouro" id="prog-col-o" style="width:0%"></div></div></div>
     <div id="badge-coletiva" class="badge badge-none">Sem meta</div>
   </div>
 </div>
@@ -203,8 +203,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="card">
       <div class="card-title">Produtos vendidos</div>
       <div class="service-grid">
-        <button class="service-btn" onclick="addPts(20,'Produto até R$50')"><div class="svc-name">Produto até R$50</div><div class="svc-pts">+20 pts</div></button>
-        <button class="service-btn" onclick="addPts(40,'Produto acima R$51')"><div class="svc-name">Produto acima R$51</div><div class="svc-pts">+40 pts</div></button>
+        <button class="service-btn" onclick="addPts(20,'Produto até R$60')"><div class="svc-name">Produto até R$60</div><div class="svc-pts">+20 pts</div></button>
+        <button class="service-btn" onclick="addPts(40,'Produto acima R$61')"><div class="svc-name">Produto acima R$61</div><div class="svc-pts">+40 pts</div></button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">Bar</div>
+      <div class="service-grid">
+        <button class="service-btn" onclick="addPts(5,'Item do bar vendido')"><div class="svc-name">Item do bar vendido</div><div class="svc-pts">+5 pts</div></button>
       </div>
     </div>
     <div class="card">
@@ -218,10 +224,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="card-title">Ações pontuáveis</div>
       <div class="service-grid">
         <button class="service-btn" onclick="addPts(5,'Agendamento convertido')"><div class="svc-name">Agendamento convertido</div><div class="svc-pts">+5 pts</div></button>
-        <button class="service-btn" onclick="addPts(20,'Produto até R$50')"><div class="svc-name">Produto até R$50</div><div class="svc-pts">+20 pts</div></button>
-        <button class="service-btn" onclick="addPts(40,'Produto acima R$51')"><div class="svc-name">Produto acima R$51</div><div class="svc-pts">+40 pts</div></button>
+        <button class="service-btn" onclick="addPts(20,'Produto até R$60')"><div class="svc-name">Produto até R$60</div><div class="svc-pts">+20 pts</div></button>
+        <button class="service-btn" onclick="addPts(40,'Produto acima R$61')"><div class="svc-name">Produto acima R$61</div><div class="svc-pts">+40 pts</div></button>
         <button class="service-btn" onclick="addPts(50,'Converteu assinante')"><div class="svc-name">Converteu assinante</div><div class="svc-pts">+50 pts</div></button>
         <button class="service-btn" onclick="addPts(15,'Reclamação resolvida')"><div class="svc-name">Reclamação resolvida</div><div class="svc-pts">+15 pts</div></button>
+        <button class="service-btn" onclick="addPts(5,'Item do bar vendido')"><div class="svc-name">Item do bar vendido</div><div class="svc-pts">+5 pts</div></button>
       </div>
     </div>
     <div class="card">
@@ -243,28 +250,29 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="info-box">Quem terminar o mês com mais pontos leva +R$150 de bônus campeão.</div>
   </div>
   <div class="card">
-    <div class="card-title">Meta coletiva — barbearia</div>
+    <div class="card-title">Meta coletiva — toda a equipe</div>
     <div class="meta-row">
-      <div class="meta-card"><div class="meta-nivel">Bronze</div><div class="meta-pts">900 pts</div><div class="meta-premio">R$100 cada</div></div>
-      <div class="meta-card"><div class="meta-nivel">Prata</div><div class="meta-pts">1400 pts</div><div class="meta-premio">R$200 cada</div></div>
-      <div class="meta-card"><div class="meta-nivel">Ouro</div><div class="meta-pts">2000 pts</div><div class="meta-premio">R$300 cada</div></div>
+      <div class="meta-card"><div class="meta-nivel">Bronze</div><div class="meta-pts">1500 pts</div><div class="meta-premio">R$25 cada</div></div>
+      <div class="meta-card"><div class="meta-nivel">Prata</div><div class="meta-pts">2500 pts</div><div class="meta-premio">R$75 cada</div></div>
+      <div class="meta-card"><div class="meta-nivel">Ouro</div><div class="meta-pts">3800 pts</div><div class="meta-premio">R$125 cada</div></div>
     </div>
+    <div class="info-box">Prêmio total: Bronze R$100 · Prata R$300 · Ouro R$500 — dividido em 4 partes iguais.</div>
   </div>
   <div class="card">
     <div class="card-title">Metas individuais — recepcionistas</div>
     <div class="meta-row">
-      <div class="meta-card"><div class="meta-nivel">Bronze</div><div class="meta-pts">150 pts</div><div class="meta-premio">R$100</div></div>
-      <div class="meta-card"><div class="meta-nivel">Prata</div><div class="meta-pts">280 pts</div><div class="meta-premio">R$200</div></div>
-      <div class="meta-card"><div class="meta-nivel">Ouro</div><div class="meta-pts">450 pts</div><div class="meta-premio">R$300</div></div>
+      <div class="meta-card"><div class="meta-nivel">Bronze</div><div class="meta-pts">220 pts</div><div class="meta-premio">R$100</div></div>
+      <div class="meta-card"><div class="meta-nivel">Prata</div><div class="meta-pts">400 pts</div><div class="meta-premio">R$200</div></div>
+      <div class="meta-card"><div class="meta-nivel">Ouro</div><div class="meta-pts">650 pts</div><div class="meta-premio">R$300</div></div>
     </div>
   </div>
   <div class="card">
     <div class="card-title">Tabela de pontuação — barbeiros</div>
-    <div class="info-box">Acabamento: 10 · Penteado / Navalha / Design cera / Esfoliação facial / Máscara / Pigmentação / Depilação: 15 · Hidratação / Esfoliação capilar / Terapia facial / Camuflagem: 25 · Selagem / Botox topo: 40 · Botox completo: 60<br><br>Corte avulso: 10 · Converteu assinante: 80 · Produto até R$50: 20 · Produto acima R$51: 40</div>
+    <div class="info-box">Acabamento: 10 · Penteado / Navalha / Design cera / Esfoliação facial / Máscara / Pigmentação / Depilação: 15 · Hidratação / Esfoliação capilar / Terapia facial / Camuflagem: 25 · Selagem / Botox topo: 40 · Botox completo: 60<br><br>Corte avulso: 10 · Converteu assinante: 80 · Produto até R$60: 20 · Produto acima R$61: 40 · Item do bar: 5</div>
   </div>
   <div class="card">
     <div class="card-title">Tabela de pontuação — recepcionistas</div>
-    <div class="info-box">Agendamento convertido: 5 · Reclamação resolvida: 15 · Produto até R$50: 20 · Produto acima R$51: 40 · Converteu assinante: 50</div>
+    <div class="info-box">Agendamento convertido: 5 · Item do bar: 5 · Reclamação resolvida: 15 · Produto até R$60: 20 · Produto acima R$61: 40 · Converteu assinante: 50</div>
   </div>
   <div class="card">
     <div class="card-title">Encerrar mês</div>
@@ -294,7 +302,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, setDoc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBFWzZRdckVMNugQeYHeqAI2EtaEThM2I4",
@@ -328,35 +336,24 @@ function getDocId(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+
 
 document.getElementById('mes-atual').textContent = getMesAtual();
 
-// Sincronização em tempo real
 const docRef = doc(db, 'pontos', getDocId());
 onSnapshot(docRef, (snap) => {
-  const dot = document.getElementById('sync-dot');
-  const label = document.getElementById('sync-label');
-  dot.className = 'sync-dot online';
-  label.textContent = 'Sincronizado';
+  document.getElementById('sync-dot').className = 'sync-dot online';
+  document.getElementById('sync-label').textContent = 'Sincronizado';
   if(snap.exists()){
     const data = snap.data();
-    Object.keys(estado).forEach(k => {
-      if(data[k]) estado[k] = data[k];
-    });
+    Object.keys(estado).forEach(k => { if(data[k]) estado[k] = data[k]; });
     updateUI();
-    const tab = document.querySelector('.tab.active');
-    if(tab && tab.textContent.trim() === 'Ranking') renderRanking();
+    if(document.querySelector('.tab.active').textContent.trim() === 'Ranking') renderRanking();
   }
-}, (err) => {
-  const dot = document.getElementById('sync-dot');
-  const label = document.getElementById('sync-label');
-  dot.className = 'sync-dot offline';
-  label.textContent = 'Sem conexão';
+}, () => {
+  document.getElementById('sync-dot').className = 'sync-dot offline';
+  document.getElementById('sync-label').textContent = 'Sem conexão';
 });
 
 async function saveToFirebase(){
-  try{
-    await setDoc(docRef, estado, {merge: true});
-  }catch(e){
-    showToast('Erro ao salvar. Verifique a conexão.');
-  }
+  try{ await setDoc(docRef, estado, {merge:true}); }
+  catch(e){ showToast('Erro ao salvar. Verifique a conexão.'); }
 }
 
 window.showTab = function(t, btn){
@@ -416,7 +413,7 @@ function renderHistorico(){
   el.innerHTML = [...h].reverse().slice(0,10).map((x,i)=>
     `<div class="hist-row">
       <span>${x.label}</span>
-      <span style="color:#aaa">${x.hora} &nbsp;<strong style="color:#82b800">+${x.pts}</strong>${i===0?`<button class="undo-btn" onclick="desfazerUltimo()">desfazer</button>`:''}</span>
+      <span style="color:#aaa">${x.hora}&nbsp;<strong style="color:#82b800">+${x.pts}</strong>${i===0?`<button class="undo-btn" onclick="desfazerUltimo()">desfazer</button>`:''}</span>
     </div>`
   ).join('');
 }
@@ -434,7 +431,8 @@ function calcBadge(pts, niveis){
 }
 
 function updateUI(){
-  const m=estado.marcus.pts, j=estado.juan.pts, a=estado.adrielle.pts, r=estado.raiany.pts, col=m+j;
+  const m=estado.marcus.pts, j=estado.juan.pts, a=estado.adrielle.pts, r=estado.raiany.pts;
+  const col=m+j+a+r;
   document.getElementById('pts-marcus').textContent=m;
   document.getElementById('pts-juan').textContent=j;
   document.getElementById('pts-adrielle').textContent=a;
@@ -442,17 +440,20 @@ function updateUI(){
   document.getElementById('pts-coletiva').textContent=col;
   setProgress('prog-marcus-b',m,400);setProgress('prog-marcus-p',m,700);setProgress('prog-marcus-o',m,1100);
   setProgress('prog-juan-b',j,400);setProgress('prog-juan-p',j,700);setProgress('prog-juan-o',j,1100);
-  setProgress('prog-adrielle-b',a,150);setProgress('prog-adrielle-p',a,280);setProgress('prog-adrielle-o',a,450);
-  setProgress('prog-raiany-b',r,150);setProgress('prog-raiany-p',r,280);setProgress('prog-raiany-o',r,450);
-  setProgress('prog-col-b',col,900);setProgress('prog-col-p',col,1400);setProgress('prog-col-o',col,2000);
-  ['marcus','juan','adrielle','raiany'].forEach(p=>{
-    const isBarbeiro=p==='marcus'||p==='juan';
-    const niveis=isBarbeiro?[400,700,1100]:[150,280,450];
-    const b=calcBadge(estado[p].pts,niveis);
+  setProgress('prog-adrielle-b',a,220);setProgress('prog-adrielle-p',a,400);setProgress('prog-adrielle-o',a,650);
+  setProgress('prog-raiany-b',r,220);setProgress('prog-raiany-p',r,400);setProgress('prog-raiany-o',r,650);
+  setProgress('prog-col-b',col,1500);setProgress('prog-col-p',col,2500);setProgress('prog-col-o',col,3800);
+  ['marcus','juan'].forEach(p=>{
+    const b=calcBadge(estado[p].pts,[400,700,1100]);
     const el=document.getElementById('badge-'+p);
     el.textContent=b.txt;el.className='badge '+b.cls;
   });
-  const bc=calcBadge(col,[900,1400,2000]);
+  ['adrielle','raiany'].forEach(p=>{
+    const b=calcBadge(estado[p].pts,[220,400,650]);
+    const el=document.getElementById('badge-'+p);
+    el.textContent=b.txt;el.className='badge '+b.cls;
+  });
+  const bc=calcBadge(col,[1500,2500,3800]);
   const ec=document.getElementById('badge-coletiva');
   ec.textContent=bc.txt;ec.className='badge '+bc.cls;
 }
