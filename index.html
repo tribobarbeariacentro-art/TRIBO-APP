@@ -62,8 +62,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .rank-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0}
 .r1{background:#f0ffd6;color:#3d6b00}
 .r2{background:#f5f5f5;color:#555}
-.r3{background:#fff3e0;color:#8b4513}
-.r4{background:#f5f5f5;color:#aaa}
 .rank-name{flex:1;font-size:14px;color:#1a1a1a}
 .rank-pts{font-size:14px;font-weight:500;color:#1a1a1a}
 .coletiva-total{font-size:38px;font-weight:500;color:#82b800;margin:6px 0 4px}
@@ -76,6 +74,31 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .hist-row:last-child{border-bottom:none}
 .undo-btn{padding:3px 8px;border:1px solid #e5e5e5;border-radius:5px;background:#fff;color:#666;font-size:11px;cursor:pointer;margin-left:6px}
 .undo-btn:hover{background:#fafafa}
+.admin-lock{text-align:center;padding:2rem 1rem}
+.admin-lock h3{font-size:16px;font-weight:500;color:#1a1a1a;margin-bottom:6px}
+.admin-lock p{font-size:13px;color:#999;margin-bottom:16px}
+.admin-input-wrap{display:flex;gap:8px;max-width:280px;margin:0 auto}
+.admin-input{flex:1;padding:9px 12px;border:1px solid #e5e5e5;border-radius:8px;font-size:14px;color:#1a1a1a;background:#fff}
+.admin-btn{padding:9px 16px;background:#1a1a1a;color:#fff;border:none;border-radius:8px;font-size:13px;cursor:pointer;font-weight:500}
+.admin-btn:hover{background:#333}
+.admin-content{display:none}
+.admin-person-block{margin-bottom:4px}
+.admin-person-title{display:flex;align-items:center;gap:10px;margin-bottom:10px;cursor:pointer;padding:8px 0}
+.admin-person-name{font-size:14px;font-weight:600;color:#1a1a1a}
+.admin-person-pts{font-size:13px;color:#82b800;font-weight:500}
+.admin-hist-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f5f5f5}
+.admin-hist-row:last-child{border-bottom:none}
+.admin-hist-label{color:#333;flex:1;font-size:13px}
+.admin-hist-meta{font-size:12px;color:#aaa}
+.admin-hist-pts{font-size:13px;font-weight:600;color:#82b800;margin:0 10px}
+.admin-remove-btn{padding:3px 8px;border:1px solid #fca5a5;border-radius:5px;background:#fff;color:#e24b4a;font-size:11px;cursor:pointer;flex-shrink:0}
+.admin-remove-btn:hover{background:#fcebeb}
+.admin-empty{font-size:13px;color:#aaa;padding:8px 0}
+.day-group-title{font-size:11px;font-weight:600;color:#aaa;letter-spacing:.05em;text-transform:uppercase;margin:12px 0 6px;padding-top:10px;border-top:1px solid #f0f0f0}
+.day-group-title:first-child{border-top:none;margin-top:0}
+.admin-logout{padding:6px 12px;border:1px solid #e5e5e5;border-radius:8px;background:#fff;color:#666;font-size:12px;cursor:pointer}
+.admin-logout:hover{background:#fafafa}
+.admin-divider{height:1px;background:#f0f0f0;margin:12px 0}
 @media(max-width:420px){
   .person-grid{grid-template-columns:1fr}
   .service-grid{grid-template-columns:1fr}
@@ -86,7 +109,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div class="app">
 
 <div class="header">
-  <img src="https://raw.githubusercontent.com/tribobarbeariacentro-art/TRIBO-APP/main/PRIMÁRIA .png" alt="Barbearia Tribo" id="logo-img" onerror="this.style.display='none';document.getElementById('logo-txt').style.display='block'">
+  <img src="https://raw.githubusercontent.com/tribobarbeariacentro-art/TRIBO-APP/main/PRIM%C3%81RIA%20.png" alt="Barbearia Tribo" id="logo-img" onerror="this.style.display='none';document.getElementById('logo-txt').style.display='block'">
   <div id="logo-txt" style="display:none;font-size:22px;font-weight:600;color:#1a1a1a;margin-bottom:4px">Barbearia Tribo</div>
   <p id="mes-atual"></p>
   <div class="sync-status">
@@ -100,6 +123,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <button class="tab" onclick="showTab('lancar',this)">Lançar pontos</button>
   <button class="tab" onclick="showTab('metas',this)">Metas</button>
   <button class="tab" onclick="showTab('ranking',this)">Ranking</button>
+  <button class="tab" onclick="showTab('admin',this)">Admin</button>
 </div>
 
 <!-- PAINEL -->
@@ -108,10 +132,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="card-title">Barbeiros</div>
     <div class="person-grid">
       <div class="person-card">
-        <div class="person-header">
-          <div class="avatar av-m">M</div>
-          <div><div class="person-name">Marcus</div><div class="person-role">Barbeiro</div></div>
-        </div>
+        <div class="person-header"><div class="avatar av-m">M</div><div><div class="person-name">Marcus</div><div class="person-role">Barbeiro</div></div></div>
         <div class="pts-display" id="pts-marcus">0</div>
         <div class="pts-label">pontos no mês</div>
         <div class="progress-wrap"><div class="progress-label"><span>Bronze</span><span>400 pts</span></div><div class="progress-bar"><div class="progress-fill pf-bronze" id="prog-marcus-b" style="width:0%"></div></div></div>
@@ -120,10 +141,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div id="badge-marcus" class="badge badge-none">Sem meta</div>
       </div>
       <div class="person-card">
-        <div class="person-header">
-          <div class="avatar av-j">J</div>
-          <div><div class="person-name">Juan</div><div class="person-role">Barbeiro</div></div>
-        </div>
+        <div class="person-header"><div class="avatar av-j">J</div><div><div class="person-name">Juan</div><div class="person-role">Barbeiro</div></div></div>
         <div class="pts-display" id="pts-juan">0</div>
         <div class="pts-label">pontos no mês</div>
         <div class="progress-wrap"><div class="progress-label"><span>Bronze</span><span>400 pts</span></div><div class="progress-bar"><div class="progress-fill pf-bronze" id="prog-juan-b" style="width:0%"></div></div></div>
@@ -133,15 +151,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       </div>
     </div>
   </div>
-
   <div class="card">
     <div class="card-title">Recepcionistas</div>
     <div class="person-grid">
       <div class="person-card">
-        <div class="person-header">
-          <div class="avatar av-a">A</div>
-          <div><div class="person-name">Adrielle</div><div class="person-role">Recepcionista</div></div>
-        </div>
+        <div class="person-header"><div class="avatar av-a">A</div><div><div class="person-name">Adrielle</div><div class="person-role">Recepcionista</div></div></div>
         <div class="pts-display" id="pts-adrielle">0</div>
         <div class="pts-label">pontos no mês</div>
         <div class="progress-wrap"><div class="progress-label"><span>Bronze</span><span>220 pts</span></div><div class="progress-bar"><div class="progress-fill pf-bronze" id="prog-adrielle-b" style="width:0%"></div></div></div>
@@ -150,10 +164,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div id="badge-adrielle" class="badge badge-none">Sem meta</div>
       </div>
       <div class="person-card">
-        <div class="person-header">
-          <div class="avatar av-r">R</div>
-          <div><div class="person-name">Raiany</div><div class="person-role">Recepcionista</div></div>
-        </div>
+        <div class="person-header"><div class="avatar av-r">R</div><div><div class="person-name">Raiany</div><div class="person-role">Recepcionista</div></div></div>
         <div class="pts-display" id="pts-raiany">0</div>
         <div class="pts-label">pontos no mês</div>
         <div class="progress-wrap"><div class="progress-label"><span>Bronze</span><span>220 pts</span></div><div class="progress-bar"><div class="progress-fill pf-bronze" id="prog-raiany-b" style="width:0%"></div></div></div>
@@ -163,7 +174,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       </div>
     </div>
   </div>
-
   <div class="card">
     <div class="card-title">Meta coletiva da barbearia</div>
     <div class="coletiva-total" id="pts-coletiva">0</div>
@@ -187,54 +197,31 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <option value="raiany">Raiany (recepcionista)</option>
     </select>
   </div>
-
   <div id="servicos-barbeiro" style="display:none">
-    <div class="card">
-      <div class="card-title">Serviços extras</div>
-      <div class="service-grid" id="grid-servicos"></div>
-    </div>
-    <div class="card">
-      <div class="card-title">Clientes avulsos</div>
-      <div class="service-grid">
-        <button class="service-btn" onclick="addPts(10,'Corte avulso')"><div class="svc-name">Corte avulso</div><div class="svc-pts">+10 pts</div></button>
-        <button class="service-btn" onclick="addPts(80,'Converteu assinante')"><div class="svc-name">Converteu assinante</div><div class="svc-pts">+80 pts</div></button>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">Produtos vendidos</div>
-      <div class="service-grid">
-        <button class="service-btn" onclick="addPts(20,'Produto até R$60')"><div class="svc-name">Produto até R$60</div><div class="svc-pts">+20 pts</div></button>
-        <button class="service-btn" onclick="addPts(40,'Produto acima R$61')"><div class="svc-name">Produto acima R$61</div><div class="svc-pts">+40 pts</div></button>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">Bar</div>
-      <div class="service-grid">
-        <button class="service-btn" onclick="addPts(5,'Item do bar vendido')"><div class="svc-name">Item do bar vendido</div><div class="svc-pts">+5 pts</div></button>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">Histórico de hoje</div>
-      <div id="historico-barb" style="font-size:13px;color:#aaa">Nenhum lançamento ainda.</div>
-    </div>
+    <div class="card"><div class="card-title">Serviços extras</div><div class="service-grid" id="grid-servicos"></div></div>
+    <div class="card"><div class="card-title">Clientes avulsos</div><div class="service-grid">
+      <button class="service-btn" onclick="addPts(10,'Corte avulso')"><div class="svc-name">Corte avulso</div><div class="svc-pts">+10 pts</div></button>
+      <button class="service-btn" onclick="addPts(80,'Converteu assinante')"><div class="svc-name">Converteu assinante</div><div class="svc-pts">+80 pts</div></button>
+    </div></div>
+    <div class="card"><div class="card-title">Produtos vendidos</div><div class="service-grid">
+      <button class="service-btn" onclick="addPts(20,'Produto até R$60')"><div class="svc-name">Produto até R$60</div><div class="svc-pts">+20 pts</div></button>
+      <button class="service-btn" onclick="addPts(40,'Produto acima R$61')"><div class="svc-name">Produto acima R$61</div><div class="svc-pts">+40 pts</div></button>
+    </div></div>
+    <div class="card"><div class="card-title">Bar</div><div class="service-grid">
+      <button class="service-btn" onclick="addPts(5,'Item do bar vendido')"><div class="svc-name">Item do bar vendido</div><div class="svc-pts">+5 pts</div></button>
+    </div></div>
+    <div class="card"><div class="card-title">Histórico de hoje</div><div id="historico-barb" style="font-size:13px;color:#aaa">Nenhum lançamento ainda.</div></div>
   </div>
-
   <div id="servicos-recep" style="display:none">
-    <div class="card">
-      <div class="card-title">Ações pontuáveis</div>
-      <div class="service-grid">
-        <button class="service-btn" onclick="addPts(5,'Agendamento convertido')"><div class="svc-name">Agendamento convertido</div><div class="svc-pts">+5 pts</div></button>
-        <button class="service-btn" onclick="addPts(20,'Produto até R$60')"><div class="svc-name">Produto até R$60</div><div class="svc-pts">+20 pts</div></button>
-        <button class="service-btn" onclick="addPts(40,'Produto acima R$61')"><div class="svc-name">Produto acima R$61</div><div class="svc-pts">+40 pts</div></button>
-        <button class="service-btn" onclick="addPts(50,'Converteu assinante')"><div class="svc-name">Converteu assinante</div><div class="svc-pts">+50 pts</div></button>
-        <button class="service-btn" onclick="addPts(15,'Reclamação resolvida')"><div class="svc-name">Reclamação resolvida</div><div class="svc-pts">+15 pts</div></button>
-        <button class="service-btn" onclick="addPts(5,'Item do bar vendido')"><div class="svc-name">Item do bar vendido</div><div class="svc-pts">+5 pts</div></button>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-title">Histórico de hoje</div>
-      <div id="historico-recep" style="font-size:13px;color:#aaa">Nenhum lançamento ainda.</div>
-    </div>
+    <div class="card"><div class="card-title">Ações pontuáveis</div><div class="service-grid">
+      <button class="service-btn" onclick="addPts(5,'Agendamento convertido')"><div class="svc-name">Agendamento convertido</div><div class="svc-pts">+5 pts</div></button>
+      <button class="service-btn" onclick="addPts(20,'Produto até R$60')"><div class="svc-name">Produto até R$60</div><div class="svc-pts">+20 pts</div></button>
+      <button class="service-btn" onclick="addPts(40,'Produto acima R$61')"><div class="svc-name">Produto acima R$61</div><div class="svc-pts">+40 pts</div></button>
+      <button class="service-btn" onclick="addPts(50,'Converteu assinante')"><div class="svc-name">Converteu assinante</div><div class="svc-pts">+50 pts</div></button>
+      <button class="service-btn" onclick="addPts(15,'Reclamação resolvida')"><div class="svc-name">Reclamação resolvida</div><div class="svc-pts">+15 pts</div></button>
+      <button class="service-btn" onclick="addPts(5,'Item do bar vendido')"><div class="svc-name">Item do bar vendido</div><div class="svc-pts">+5 pts</div></button>
+    </div></div>
+    <div class="card"><div class="card-title">Histórico de hoje</div><div id="historico-recep" style="font-size:13px;color:#aaa">Nenhum lançamento ainda.</div></div>
   </div>
 </div>
 
@@ -256,7 +243,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="meta-card"><div class="meta-nivel">Prata</div><div class="meta-pts">2500 pts</div><div class="meta-premio">R$75 cada</div></div>
       <div class="meta-card"><div class="meta-nivel">Ouro</div><div class="meta-pts">3800 pts</div><div class="meta-premio">R$125 cada</div></div>
     </div>
-    <div class="info-box">Prêmio total: Bronze R$100 · Prata R$300 · Ouro R$500 — dividido em 4 partes iguais.</div>
+    <div class="info-box">Prêmio total: Bronze R$100 · Prata R$300 · Ouro R$500, dividido em 4 partes iguais.</div>
   </div>
   <div class="card">
     <div class="card-title">Metas individuais — recepcionistas</div>
@@ -283,17 +270,31 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 
 <!-- RANKING -->
 <div id="tab-ranking" class="panel">
+  <div class="card"><div class="card-title">Ranking — barbeiros</div><div id="ranking-barb"></div></div>
+  <div class="card"><div class="card-title">Ranking — recepcionistas</div><div id="ranking-recep"></div></div>
+  <div class="card"><div class="card-title">Disputa — campeão do mês</div><div id="disputa-info" class="info-box"></div></div>
+</div>
+
+<!-- ADMIN -->
+<div id="tab-admin" class="panel">
   <div class="card">
-    <div class="card-title">Ranking — barbeiros</div>
-    <div id="ranking-barb"></div>
-  </div>
-  <div class="card">
-    <div class="card-title">Ranking — recepcionistas</div>
-    <div id="ranking-recep"></div>
-  </div>
-  <div class="card">
-    <div class="card-title">Disputa — campeão do mês</div>
-    <div id="disputa-info" class="info-box"></div>
+    <div id="admin-lock-screen" class="admin-lock">
+      <div style="font-size:32px;margin-bottom:12px">🔐</div>
+      <h3>Área do Admin</h3>
+      <p>Acesso restrito ao dono da barbearia.</p>
+      <div class="admin-input-wrap">
+        <input class="admin-input" type="password" id="admin-senha" placeholder="Senha" onkeydown="if(event.key==='Enter')verificarSenha()">
+        <button class="admin-btn" onclick="verificarSenha()">Entrar</button>
+      </div>
+      <div id="admin-erro" style="font-size:12px;color:#e24b4a;margin-top:10px;display:none">Senha incorreta.</div>
+    </div>
+    <div id="admin-content" class="admin-content">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div style="font-size:14px;font-weight:600;color:#1a1a1a">Painel do Admin</div>
+        <button class="admin-logout" onclick="adminLogout()">Sair</button>
+      </div>
+      <div id="admin-body"></div>
+    </div>
   </div>
 </div>
 
@@ -327,90 +328,92 @@ const SERVICOS_BARB = [
   {nome:'Selagem',pts:40},{nome:'Botox topo',pts:40},{nome:'Botox completo',pts:60}
 ];
 
-const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-let estado = {marcus:{pts:0,hist:[]},juan:{pts:0,hist:[]},adrielle:{pts:0,hist:[]},raiany:{pts:0,hist:[]}};
-let ultimoLancamento = null;
+const MESES=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const DIAS=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+let estado={marcus:{pts:0,hist:[]},juan:{pts:0,hist:[]},adrielle:{pts:0,hist:[]},raiany:{pts:0,hist:[]}};
+let ultimoLancamento=null;
+let adminLogado=false;
 
 function getMesAtual(){const d=new Date();return MESES[d.getMonth()]+' '+d.getFullYear();}
 function getDocId(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1);}
+function getDayKey(ts){const d=new Date(ts);return DIAS[d.getDay()]+', '+d.getDate()+'/'+('0'+(d.getMonth()+1)).slice(-2);}
 
-document.getElementById('mes-atual').textContent = getMesAtual();
+document.getElementById('mes-atual').textContent=getMesAtual();
 
-const docRef = doc(db, 'pontos', getDocId());
-onSnapshot(docRef, (snap) => {
-  document.getElementById('sync-dot').className = 'sync-dot online';
-  document.getElementById('sync-label').textContent = 'Sincronizado';
+const docRef=doc(db,'pontos',getDocId());
+onSnapshot(docRef,(snap)=>{
+  document.getElementById('sync-dot').className='sync-dot online';
+  document.getElementById('sync-label').textContent='Sincronizado';
   if(snap.exists()){
-    const data = snap.data();
-    Object.keys(estado).forEach(k => { if(data[k]) estado[k] = data[k]; });
+    const data=snap.data();
+    Object.keys(estado).forEach(k=>{if(data[k])estado[k]=data[k];});
     updateUI();
-    if(document.querySelector('.tab.active').textContent.trim() === 'Ranking') renderRanking();
+    const activeTab=document.querySelector('.tab.active');
+    if(activeTab&&activeTab.textContent.trim()==='Ranking') renderRanking();
+    if(adminLogado) renderAdminBody();
   }
-}, () => {
-  document.getElementById('sync-dot').className = 'sync-dot offline';
-  document.getElementById('sync-label').textContent = 'Sem conexão';
+},()=>{
+  document.getElementById('sync-dot').className='sync-dot offline';
+  document.getElementById('sync-label').textContent='Sem conexão';
 });
 
 async function saveToFirebase(){
-  try{ await setDoc(docRef, estado, {merge:true}); }
-  catch(e){ showToast('Erro ao salvar. Verifique a conexão.'); }
+  try{await setDoc(docRef,estado,{merge:true});}
+  catch(e){showToast('Erro ao salvar. Verifique a conexão.');}
 }
 
-window.showTab = function(t, btn){
+window.showTab=function(t,btn){
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+t).classList.add('active');
   btn.classList.add('active');
   if(t==='ranking') renderRanking();
+  if(t==='admin'&&adminLogado) renderAdminBody();
 };
 
-document.getElementById('pessoa-sel').addEventListener('change', function(){
-  const v = this.value;
-  document.getElementById('servicos-barbeiro').style.display = (v==='marcus'||v==='juan') ? 'block' : 'none';
-  document.getElementById('servicos-recep').style.display = (v==='adrielle'||v==='raiany') ? 'block' : 'none';
+document.getElementById('pessoa-sel').addEventListener('change',function(){
+  const v=this.value;
+  document.getElementById('servicos-barbeiro').style.display=(v==='marcus'||v==='juan')?'block':'none';
+  document.getElementById('servicos-recep').style.display=(v==='adrielle'||v==='raiany')?'block':'none';
   renderHistorico();
 });
 
 function renderServicos(){
-  document.getElementById('grid-servicos').innerHTML = SERVICOS_BARB.map(s=>
+  document.getElementById('grid-servicos').innerHTML=SERVICOS_BARB.map(s=>
     `<button class="service-btn" onclick="addPts(${s.pts},'${s.nome}')"><div class="svc-name">${s.nome}</div><div class="svc-pts">+${s.pts} pts</div></button>`
   ).join('');
 }
 
-window.addPts = function(pts, label){
-  const p = document.getElementById('pessoa-sel').value;
+window.addPts=function(pts,label){
+  const p=document.getElementById('pessoa-sel').value;
   if(!p){showToast('Selecione uma pessoa primeiro');return;}
-  estado[p].pts += pts;
-  const entry = {label, pts, hora: new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}), id: Date.now()};
+  estado[p].pts+=pts;
+  const entry={label,pts,hora:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),ts:Date.now(),id:Date.now()};
   estado[p].hist.push(entry);
-  ultimoLancamento = {pessoa: p, pts, id: entry.id};
-  saveToFirebase();
-  updateUI();
-  renderHistorico();
+  ultimoLancamento={pessoa:p,pts,id:entry.id};
+  saveToFirebase();updateUI();renderHistorico();
   showToast('+'+pts+' pts — '+label);
 };
 
-window.desfazerUltimo = function(){
+window.desfazerUltimo=function(){
   if(!ultimoLancamento) return;
-  const {pessoa, pts, id} = ultimoLancamento;
-  estado[pessoa].pts = Math.max(0, estado[pessoa].pts - pts);
-  estado[pessoa].hist = estado[pessoa].hist.filter(h => h.id !== id);
-  ultimoLancamento = null;
-  saveToFirebase();
-  updateUI();
-  renderHistorico();
+  const{pessoa,pts,id}=ultimoLancamento;
+  estado[pessoa].pts=Math.max(0,estado[pessoa].pts-pts);
+  estado[pessoa].hist=estado[pessoa].hist.filter(h=>h.id!==id);
+  ultimoLancamento=null;
+  saveToFirebase();updateUI();renderHistorico();
   showToast('Lançamento desfeito');
 };
 
 function renderHistorico(){
-  const p = document.getElementById('pessoa-sel').value;
+  const p=document.getElementById('pessoa-sel').value;
   if(!p) return;
-  const h = estado[p].hist;
-  const isBarbeiro = p==='marcus'||p==='juan';
-  const el = document.getElementById(isBarbeiro?'historico-barb':'historico-recep');
+  const h=estado[p].hist;
+  const isBarbeiro=p==='marcus'||p==='juan';
+  const el=document.getElementById(isBarbeiro?'historico-barb':'historico-recep');
   if(!el) return;
   if(h.length===0){el.innerHTML='Nenhum lançamento ainda.';return;}
-  el.innerHTML = [...h].reverse().slice(0,10).map((x,i)=>
+  el.innerHTML=[...h].reverse().slice(0,10).map((x,i)=>
     `<div class="hist-row">
       <span>${x.label}</span>
       <span style="color:#aaa">${x.hora}&nbsp;<strong style="color:#82b800">+${x.pts}</strong>${i===0?`<button class="undo-btn" onclick="desfazerUltimo()">desfazer</button>`:''}</span>
@@ -418,21 +421,17 @@ function renderHistorico(){
   ).join('');
 }
 
-function setProgress(id, val, max){
-  const el = document.getElementById(id);
-  if(el) el.style.width = Math.min(100, Math.round((val/max)*100))+'%';
-}
+function setProgress(id,val,max){const el=document.getElementById(id);if(el)el.style.width=Math.min(100,Math.round((val/max)*100))+'%';}
 
-function calcBadge(pts, niveis){
-  if(pts>=niveis[2]) return {txt:'Ouro',cls:'badge-ouro'};
-  if(pts>=niveis[1]) return {txt:'Prata',cls:'badge-prata'};
-  if(pts>=niveis[0]) return {txt:'Bronze',cls:'badge-bronze'};
-  return {txt:'Sem meta',cls:'badge-none'};
+function calcBadge(pts,niveis){
+  if(pts>=niveis[2]) return{txt:'Ouro',cls:'badge-ouro'};
+  if(pts>=niveis[1]) return{txt:'Prata',cls:'badge-prata'};
+  if(pts>=niveis[0]) return{txt:'Bronze',cls:'badge-bronze'};
+  return{txt:'Sem meta',cls:'badge-none'};
 }
 
 function updateUI(){
-  const m=estado.marcus.pts, j=estado.juan.pts, a=estado.adrielle.pts, r=estado.raiany.pts;
-  const col=m+j+a+r;
+  const m=estado.marcus.pts,j=estado.juan.pts,a=estado.adrielle.pts,r=estado.raiany.pts,col=m+j+a+r;
   document.getElementById('pts-marcus').textContent=m;
   document.getElementById('pts-juan').textContent=j;
   document.getElementById('pts-adrielle').textContent=a;
@@ -443,32 +442,19 @@ function updateUI(){
   setProgress('prog-adrielle-b',a,220);setProgress('prog-adrielle-p',a,400);setProgress('prog-adrielle-o',a,650);
   setProgress('prog-raiany-b',r,220);setProgress('prog-raiany-p',r,400);setProgress('prog-raiany-o',r,650);
   setProgress('prog-col-b',col,1500);setProgress('prog-col-p',col,2500);setProgress('prog-col-o',col,3800);
-  ['marcus','juan'].forEach(p=>{
-    const b=calcBadge(estado[p].pts,[400,700,1100]);
-    const el=document.getElementById('badge-'+p);
-    el.textContent=b.txt;el.className='badge '+b.cls;
-  });
-  ['adrielle','raiany'].forEach(p=>{
-    const b=calcBadge(estado[p].pts,[220,400,650]);
-    const el=document.getElementById('badge-'+p);
-    el.textContent=b.txt;el.className='badge '+b.cls;
-  });
+  ['marcus','juan'].forEach(p=>{const b=calcBadge(estado[p].pts,[400,700,1100]);const el=document.getElementById('badge-'+p);el.textContent=b.txt;el.className='badge '+b.cls;});
+  ['adrielle','raiany'].forEach(p=>{const b=calcBadge(estado[p].pts,[220,400,650]);const el=document.getElementById('badge-'+p);el.textContent=b.txt;el.className='badge '+b.cls;});
   const bc=calcBadge(col,[1500,2500,3800]);
-  const ec=document.getElementById('badge-coletiva');
-  ec.textContent=bc.txt;ec.className='badge '+bc.cls;
+  const ec=document.getElementById('badge-coletiva');ec.textContent=bc.txt;ec.className='badge '+bc.cls;
 }
 
 function renderRanking(){
   const barb=[{n:'Marcus',p:estado.marcus.pts,av:'av-m'},{n:'Juan',p:estado.juan.pts,av:'av-j'}].sort((a,b)=>b.p-a.p);
   const recep=[{n:'Adrielle',p:estado.adrielle.pts,av:'av-a'},{n:'Raiany',p:estado.raiany.pts,av:'av-r'}].sort((a,b)=>b.p-a.p);
   const ranks=['r1','r2'];
-  document.getElementById('ranking-barb').innerHTML=barb.map((x,i)=>
-    `<div class="ranking-item"><div class="rank-num ${ranks[i]}">${i+1}</div><div class="avatar ${x.av}" style="width:32px;height:32px;font-size:12px">${x.n[0]}</div><div class="rank-name">${x.n}</div><div class="rank-pts">${x.p} pts</div></div>`
-  ).join('');
-  document.getElementById('ranking-recep').innerHTML=recep.map((x,i)=>
-    `<div class="ranking-item"><div class="rank-num ${ranks[i]}">${i+1}</div><div class="avatar ${x.av}" style="width:32px;height:32px;font-size:12px">${x.n[0]}</div><div class="rank-name">${x.n}</div><div class="rank-pts">${x.p} pts</div></div>`
-  ).join('');
-  const mv=estado.marcus.pts, jv=estado.juan.pts;
+  document.getElementById('ranking-barb').innerHTML=barb.map((x,i)=>`<div class="ranking-item"><div class="rank-num ${ranks[i]}">${i+1}</div><div class="avatar ${x.av}" style="width:32px;height:32px;font-size:12px">${x.n[0]}</div><div class="rank-name">${x.n}</div><div class="rank-pts">${x.p} pts</div></div>`).join('');
+  document.getElementById('ranking-recep').innerHTML=recep.map((x,i)=>`<div class="ranking-item"><div class="rank-num ${ranks[i]}">${i+1}</div><div class="avatar ${x.av}" style="width:32px;height:32px;font-size:12px">${x.n[0]}</div><div class="rank-name">${x.n}</div><div class="rank-pts">${x.p} pts</div></div>`).join('');
+  const mv=estado.marcus.pts,jv=estado.juan.pts;
   let d='';
   if(mv===0&&jv===0) d='Nenhum ponto lançado ainda. Que comecem!';
   else if(mv===jv) d='Empate com '+mv+' pts cada. O mês ainda não acabou.';
@@ -476,11 +462,92 @@ function renderRanking(){
   document.getElementById('disputa-info').textContent=d;
 }
 
-window.confirmarReset = function(){
+// ADMIN
+const PESSOAS_INFO=[
+  {key:'marcus',nome:'Marcus',role:'Barbeiro',av:'av-m'},
+  {key:'juan',nome:'Juan',role:'Barbeiro',av:'av-j'},
+  {key:'adrielle',nome:'Adrielle',role:'Recepcionista',av:'av-a'},
+  {key:'raiany',nome:'Raiany',role:'Recepcionista',av:'av-r'}
+];
+
+window.verificarSenha=function(){
+  const senha=document.getElementById('admin-senha').value;
+  if(senha==='midia123'){
+    adminLogado=true;
+    document.getElementById('admin-lock-screen').style.display='none';
+    document.getElementById('admin-content').style.display='block';
+    renderAdminBody();
+  } else {
+    document.getElementById('admin-erro').style.display='block';
+    document.getElementById('admin-senha').value='';
+  }
+};
+
+window.adminLogout=function(){
+  adminLogado=false;
+  document.getElementById('admin-lock-screen').style.display='block';
+  document.getElementById('admin-content').style.display='none';
+  document.getElementById('admin-senha').value='';
+  document.getElementById('admin-erro').style.display='none';
+};
+
+window.removerLancamento=function(pessoaKey, entryId){
+  const entry=estado[pessoaKey].hist.find(h=>h.id===entryId);
+  if(!entry) return;
+  if(!confirm('Remover "'+entry.label+'" (+'+entry.pts+' pts) de '+pessoaKey+'? Os pontos serão descontados.')) return;
+  estado[pessoaKey].pts=Math.max(0,estado[pessoaKey].pts-entry.pts);
+  estado[pessoaKey].hist=estado[pessoaKey].hist.filter(h=>h.id!==entryId);
+  saveToFirebase();
+  updateUI();
+  renderAdminBody();
+  showToast('Lançamento removido.');
+};
+
+function renderAdminBody(){
+  const body=document.getElementById('admin-body');
+  body.innerHTML=PESSOAS_INFO.map((p,idx)=>{
+    const h=estado[p.key].hist;
+    const pts=estado[p.key].pts;
+    const grupos={};
+    [...h].reverse().forEach(x=>{
+      const day=x.ts?getDayKey(x.ts):'Sem data';
+      if(!grupos[day]) grupos[day]=[];
+      grupos[day].push(x);
+    });
+    const histHTML=Object.keys(grupos).length===0
+      ?'<div class="admin-empty">Nenhum lançamento ainda.</div>'
+      :Object.entries(grupos).map(([day,items])=>`
+        <div class="day-group-title">${day}</div>
+        ${items.map(x=>`
+          <div class="admin-hist-row">
+            <span class="admin-hist-label">${x.label}</span>
+            <div style="display:flex;align-items:center;gap:4px">
+              <span class="admin-hist-meta">${x.hora||''}</span>
+              <span class="admin-hist-pts">+${x.pts}</span>
+              <button class="admin-remove-btn" onclick="removerLancamento('${p.key}',${x.id})">remover</button>
+            </div>
+          </div>
+        `).join('')}
+      `).join('');
+    return `
+      <div class="admin-person-block">
+        <div class="admin-person-title">
+          <div class="avatar ${p.av}" style="width:32px;height:32px;font-size:12px">${p.nome[0]}</div>
+          <span class="admin-person-name">${p.nome}</span>
+          <span class="admin-person-pts">${pts} pts</span>
+          <span style="font-size:12px;color:#aaa;margin-left:4px">${p.role}</span>
+        </div>
+        ${histHTML}
+      </div>
+      ${idx<PESSOAS_INFO.length-1?'<div class="admin-divider"></div>':''}
+    `;
+  }).join('');
+}
+
+window.confirmarReset=function(){
   if(confirm('Zerar todos os pontos e iniciar novo mês? Esta ação não pode ser desfeita.')){
     Object.keys(estado).forEach(p=>{estado[p].pts=0;estado[p].hist=[];});
-    saveToFirebase();
-    updateUI();
+    saveToFirebase();updateUI();
     showToast('Novo mês iniciado. Pontos zerados.');
   }
 };
