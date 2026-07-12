@@ -3,563 +3,1025 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Barbearia Tribo</title>
+<title>Controle de Caixa - Tribo Barbearia Centro</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f3;color:#1a1a1a;min-height:100vh}
-.app{max-width:680px;margin:0 auto;padding:1rem}
-.header{text-align:center;margin-bottom:1.25rem;padding:1.25rem;background:#fff;border:1px solid #e5e5e5;border-radius:12px}
-.header img{height:52px;object-fit:contain;margin-bottom:6px}
-.header p{font-size:13px;color:#888}
-.sync-status{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:#888;margin-top:4px}
-.sync-dot{width:7px;height:7px;border-radius:50%;background:#ccc;flex-shrink:0}
-.sync-dot.online{background:#82b800}
-.sync-dot.offline{background:#e24b4a}
-.tabs{display:flex;gap:6px;margin-bottom:1.25rem;flex-wrap:wrap}
-.tab{padding:7px 15px;border-radius:8px;border:1px solid #e5e5e5;font-size:13px;cursor:pointer;background:#fff;color:#666;transition:all .15s}
-.tab.active{background:#fff;border-color:#333;color:#1a1a1a;font-weight:500}
-.panel{display:none}.panel.active{display:block}
-.card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;padding:1rem 1.25rem;margin-bottom:12px}
-.card-title{font-size:12px;font-weight:500;color:#999;margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.06em}
-.person-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.person-card{background:#fafafa;border:1px solid #e5e5e5;border-radius:12px;padding:1rem}
-.person-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
-.avatar{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:500;flex-shrink:0}
-.av-m{background:#e8f5d0;color:#3d6b00}
-.av-j{background:#e8f5d0;color:#3d6b00}
-.av-a{background:#ede8f5;color:#3d0070}
-.av-r{background:#ede8f5;color:#3d0070}
-.person-name{font-size:15px;font-weight:500;color:#1a1a1a}
-.person-role{font-size:12px;color:#999}
-.pts-display{font-size:30px;font-weight:500;color:#82b800;margin-bottom:2px}
-.pts-label{font-size:12px;color:#aaa;margin-bottom:12px}
-.progress-wrap{margin-bottom:8px}
-.progress-label{display:flex;justify-content:space-between;font-size:11px;color:#aaa;margin-bottom:3px}
-.progress-bar{height:5px;background:#eee;border-radius:3px;overflow:hidden}
-.progress-fill{height:100%;border-radius:3px;transition:width .4s ease}
-.pf-bronze{background:#CD7F32}
-.pf-prata{background:#A8A9AD}
-.pf-ouro{background:#82b800}
-.badge{display:inline-block;font-size:11px;font-weight:500;padding:3px 9px;border-radius:6px;margin-top:6px}
-.badge-bronze{background:#fff3e0;color:#8b4513}
-.badge-prata{background:#f5f5f5;color:#555}
-.badge-ouro{background:#f0ffd6;color:#3d6b00}
-.badge-none{background:#f5f5f5;color:#aaa}
-.service-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.service-btn{padding:9px 10px;border:1px solid #e5e5e5;border-radius:8px;background:#fff;cursor:pointer;text-align:left;transition:all .15s}
-.service-btn:hover{border-color:#ccc;background:#fafafa}
-.service-btn:active{transform:scale(.98)}
-.svc-name{font-size:13px;color:#1a1a1a;line-height:1.3}
-.svc-pts{font-size:11px;color:#82b800;margin-top:2px;font-weight:500}
-.select-person{width:100%;padding:9px 12px;border:1px solid #e5e5e5;border-radius:8px;background:#fff;color:#1a1a1a;font-size:13px;margin-bottom:12px;cursor:pointer}
-.meta-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:10px}
-.meta-card{background:#fafafa;border:1px solid #e5e5e5;border-radius:8px;padding:.75rem;text-align:center}
-.meta-nivel{font-size:11px;font-weight:500;color:#aaa;margin-bottom:3px}
-.meta-pts{font-size:15px;font-weight:500;color:#1a1a1a}
-.meta-premio{font-size:12px;color:#82b800;font-weight:500}
-.ranking-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid #f0f0f0}
-.ranking-item:last-child{border-bottom:none}
-.rank-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0}
-.r1{background:#f0ffd6;color:#3d6b00}
-.r2{background:#f5f5f5;color:#555}
-.rank-name{flex:1;font-size:14px;color:#1a1a1a}
-.rank-pts{font-size:14px;font-weight:500;color:#1a1a1a}
-.coletiva-total{font-size:38px;font-weight:500;color:#82b800;margin:6px 0 4px}
-.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:9px 18px;border-radius:8px;font-size:13px;opacity:0;transition:opacity .3s;pointer-events:none;z-index:100;white-space:nowrap}
-.toast.show{opacity:1}
-.reset-btn{padding:7px 14px;border:1px solid #e24b4a;border-radius:8px;background:transparent;color:#a32d2d;font-size:12px;cursor:pointer;margin-top:8px}
-.reset-btn:hover{background:#fcebeb}
-.info-box{background:#fafafa;border:1px solid #e5e5e5;border-radius:8px;padding:.75rem;font-size:13px;color:#666;line-height:1.6;margin-bottom:10px}
-.hist-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #f5f5f5;font-size:13px}
-.hist-row:last-child{border-bottom:none}
-.undo-btn{padding:3px 8px;border:1px solid #e5e5e5;border-radius:5px;background:#fff;color:#666;font-size:11px;cursor:pointer;margin-left:6px}
-.undo-btn:hover{background:#fafafa}
-.admin-lock{text-align:center;padding:2rem 1rem}
-.admin-lock h3{font-size:16px;font-weight:500;color:#1a1a1a;margin-bottom:6px}
-.admin-lock p{font-size:13px;color:#999;margin-bottom:16px}
-.admin-input-wrap{display:flex;gap:8px;max-width:280px;margin:0 auto}
-.admin-input{flex:1;padding:9px 12px;border:1px solid #e5e5e5;border-radius:8px;font-size:14px;color:#1a1a1a;background:#fff}
-.admin-btn{padding:9px 16px;background:#1a1a1a;color:#fff;border:none;border-radius:8px;font-size:13px;cursor:pointer;font-weight:500}
-.admin-btn:hover{background:#333}
-.admin-content{display:none}
-.admin-person-block{margin-bottom:4px}
-.admin-person-title{display:flex;align-items:center;gap:10px;margin-bottom:10px;cursor:pointer;padding:8px 0}
-.admin-person-name{font-size:14px;font-weight:600;color:#1a1a1a}
-.admin-person-pts{font-size:13px;color:#82b800;font-weight:500}
-.admin-hist-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f5f5f5}
-.admin-hist-row:last-child{border-bottom:none}
-.admin-hist-label{color:#333;flex:1;font-size:13px}
-.admin-hist-meta{font-size:12px;color:#aaa}
-.admin-hist-pts{font-size:13px;font-weight:600;color:#82b800;margin:0 10px}
-.admin-remove-btn{padding:3px 8px;border:1px solid #fca5a5;border-radius:5px;background:#fff;color:#e24b4a;font-size:11px;cursor:pointer;flex-shrink:0}
-.admin-remove-btn:hover{background:#fcebeb}
-.admin-empty{font-size:13px;color:#aaa;padding:8px 0}
-.day-group-title{font-size:11px;font-weight:600;color:#aaa;letter-spacing:.05em;text-transform:uppercase;margin:12px 0 6px;padding-top:10px;border-top:1px solid #f0f0f0}
-.day-group-title:first-child{border-top:none;margin-top:0}
-.admin-logout{padding:6px 12px;border:1px solid #e5e5e5;border-radius:8px;background:#fff;color:#666;font-size:12px;cursor:pointer}
-.admin-logout:hover{background:#fafafa}
-.admin-divider{height:1px;background:#f0f0f0;margin:12px 0}
-@media(max-width:420px){
-  .person-grid{grid-template-columns:1fr}
-  .service-grid{grid-template-columns:1fr}
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --bg: #171512;
+  --surface: #201C18;
+  --surface2: #262119;
+  --line: #3A332A;
+  --text: #EDE4D3;
+  --muted: #A89A87;
+  --brass: #C08A45;
+  --entrada: #5E9468;
+  --saida: #BD5B50;
+  --amber: #D2A24C;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter',sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.mono{font-family:'IBM Plex Mono',monospace;}
+h1,h2,h3,.display{font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:.03em;}
+
+.stripe{
+  height:5px;
+  background:repeating-linear-gradient(45deg, var(--saida) 0 10px, var(--text) 10px 20px, #3E5C76 20px 30px);
+}
+
+.app-header{
+  padding:22px 20px 16px;
+  text-align:center;
+  border-bottom:1px solid var(--line);
+}
+.app-header h1{font-size:22px; margin:0 0 2px; color:var(--brass);}
+.app-header p{margin:0; font-size:12px; color:var(--muted); letter-spacing:.05em;}
+
+.tabs{
+  display:flex;
+  gap:2px;
+  background:var(--surface);
+  border-bottom:1px solid var(--line);
+  overflow-x:auto;
+}
+.tab-btn{
+  flex:1;
+  min-width:90px;
+  padding:12px 8px;
+  background:none;
+  border:none;
+  color:var(--muted);
+  font-family:'Oswald',sans-serif;
+  font-size:12.5px;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  cursor:pointer;
+  border-bottom:3px solid transparent;
+}
+.tab-btn.active{color:var(--text); border-bottom-color:var(--brass);}
+
+#content{padding:16px; max-width:820px; margin:0 auto 60px;}
+
+.card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:16px;
+  margin-bottom:16px;
+}
+.card h3{font-size:14px; margin:0 0 12px; color:var(--muted);}
+
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+.grid3{display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;}
+@media(max-width:480px){.grid3{grid-template-columns:1fr;}}
+
+label{display:block; font-size:11px; color:var(--muted); margin-bottom:4px; text-transform:uppercase; letter-spacing:.04em;}
+input, select{
+  width:100%;
+  padding:10px;
+  background:var(--surface2);
+  border:1px solid var(--line);
+  border-radius:6px;
+  color:var(--text);
+  font-family:'Inter',sans-serif;
+  font-size:14px;
+  margin-bottom:10px;
+}
+input:focus, select:focus{outline:2px solid var(--brass); outline-offset:1px;}
+
+.btn{
+  padding:11px 18px;
+  border-radius:6px;
+  border:none;
+  font-family:'Oswald',sans-serif;
+  font-size:13px;
+  letter-spacing:.03em;
+  text-transform:uppercase;
+  cursor:pointer;
+}
+.btn-primary{background:var(--brass); color:#1A1410;}
+.btn-entrada{background:var(--entrada); color:#0F1A11;}
+.btn-saida{background:var(--saida); color:#1F0E0B;}
+.btn-ghost{background:none; border:1px solid var(--line); color:var(--text);}
+.btn-danger{background:none; border:1px solid var(--saida); color:var(--saida);}
+.btn:disabled{opacity:.4; cursor:not-allowed;}
+
+.type-toggle{display:flex; gap:8px; margin-bottom:10px;}
+.type-toggle button{flex:1; padding:10px; border-radius:6px; border:1px solid var(--line); background:var(--surface2); color:var(--muted); font-family:'Oswald',sans-serif; letter-spacing:.03em; cursor:pointer;}
+.type-toggle button.sel-entrada{background:rgba(94,148,104,.18); border-color:var(--entrada); color:var(--entrada);}
+.type-toggle button.sel-saida{background:rgba(189,91,80,.18); border-color:var(--saida); color:var(--saida);}
+
+.month-nav{display:flex; align-items:center; justify-content:center; gap:16px; margin-bottom:14px;}
+.month-nav button{background:none; border:1px solid var(--line); color:var(--text); width:34px; height:34px; border-radius:6px; cursor:pointer; font-size:16px;}
+.month-nav .label{font-family:'Oswald',sans-serif; font-size:16px; letter-spacing:.03em;}
+
+table{width:100%; border-collapse:collapse; font-size:13px;}
+th{text-align:left; font-size:10.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); padding:6px 6px; border-bottom:1px solid var(--line);}
+td{padding:8px 6px; border-bottom:1px solid var(--line); vertical-align:top;}
+tr:last-child td{border-bottom:none;}
+.val-entrada{color:var(--entrada);}
+.val-saida{color:var(--saida);}
+.right{text-align:right;}
+.center{text-align:center;}
+.small-del{background:none; border:none; color:var(--muted); cursor:pointer; font-size:13px;}
+.small-del:hover{color:var(--saida);}
+
+.stat-box{text-align:center;}
+.stat-box .n{font-family:'IBM Plex Mono',monospace; font-size:19px; font-weight:600;}
+.stat-box .l{font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.04em;}
+
+.badge{display:inline-block; padding:3px 8px; border-radius:20px; font-size:10.5px; text-transform:uppercase; letter-spacing:.03em;}
+.badge-pendente{background:rgba(210,162,76,.18); color:var(--amber);}
+.badge-pago{background:rgba(94,148,104,.18); color:var(--entrada);}
+
+.empty{text-align:center; padding:30px 10px; color:var(--muted); font-size:13px;}
+
+.chart-wrap{position:relative; height:220px; margin-top:10px;}
+
+.statement{background:#fff; color:#111; padding:24px; border-radius:6px; font-family:'IBM Plex Mono',monospace; font-size:12.5px;}
+.statement h2{font-family:'Oswald',sans-serif; color:#111; font-size:18px; margin:0 0 2px;}
+.statement .sub{color:#555; font-size:11px; margin-bottom:14px;}
+.statement table{font-size:11.5px;}
+.statement th, .statement td{border-bottom:1px solid #ddd; color:#111;}
+.statement .val-entrada{color:#2e6b3a;}
+.statement .val-saida{color:#8a2f26;}
+
+@media print{
+  .no-print{display:none !important;}
+  body{background:#fff;}
+  #content{max-width:none; padding:0;}
+  .statement{border:none; padding:0;}
 }
 </style>
 </head>
 <body>
-<div class="app">
 
-<div class="header">
-  <img src="https://raw.githubusercontent.com/tribobarbeariacentro-art/TRIBO-APP/main/PRIM%C3%81RIA%20.png" alt="Barbearia Tribo" id="logo-img" onerror="this.style.display='none';document.getElementById('logo-txt').style.display='block'">
-  <div id="logo-txt" style="display:none;font-size:22px;font-weight:600;color:#1a1a1a;margin-bottom:4px">Barbearia Tribo</div>
-  <p id="mes-atual"></p>
-  <div class="sync-status">
-    <div class="sync-dot" id="sync-dot"></div>
-    <span id="sync-label">Conectando...</span>
-  </div>
+<div class="app-header no-print">
+  <h1>Tribo Barbearia · Centro</h1>
+  <p>Controle de caixa diário e contas a pagar</p>
 </div>
+<div class="stripe no-print"></div>
 
-<div class="tabs">
-  <button class="tab active" onclick="showTab('painel',this)">Painel</button>
-  <button class="tab" onclick="showTab('lancar',this)">Lançar pontos</button>
-  <button class="tab" onclick="showTab('metas',this)">Metas</button>
-  <button class="tab" onclick="showTab('ranking',this)">Ranking</button>
-  <button class="tab" onclick="showTab('admin',this)">Admin</button>
-</div>
+<div class="tabs no-print" id="tabs"></div>
 
-<!-- PAINEL -->
-<div id="tab-painel" class="panel active">
-  <div class="card">
-    <div class="card-title">Barbeiros</div>
-    <div class="person-grid">
-      <div class="person-card">
-        <div class="person-header"><div class="avatar av-m">M</div><div><div class="person-name">Marcus</div><div class="person-role">Barbeiro</div></div></div>
-        <div class="pts-display" id="pts-marcus">0</div>
-        <div class="pts-label">pontos no mês</div>
-        <div class="progress-wrap"><div class="progress-label"><span>Bronze</span><span>400 pts</span></div><div class="progress-bar"><div class="progress-fill pf-bronze" id="prog-marcus-b" style="width:0%"></div></div></div>
-        <div class="progress-wrap"><div class="progress-label"><span>Prata</span><span>700 pts</span></div><div class="progress-bar"><div class="progress-fill pf-prata" id="prog-marcus-p" style="width:0%"></div></div></div>
-        <div class="progress-wrap"><div class="progress-label"><span>Ouro</span><span>1100 pts</span></div><div class="progress-bar"><div class="progress-fill pf-ouro" id="prog-marcus-o" style="width:0%"></div></div></div>
-        <div id="badge-marcus" class="badge badge-none">Sem meta</div>
-      </div>
-      <div class="person-card">
-        <div class="person-header"><div class="avatar av-j">J</div><div><div class="person-name">Juan</div><div class="person-role">Barbeiro</div></div></div>
-        <div class="pts-display" id="pts-juan">0</div>
-        <div class="pts-label">pontos no mês</div>
-        <div class="progress-wrap"><div class="progress-label"><span>Bronze</span><span>400 pts</span></div><div class="progress-bar"><div class="progress-fill pf-bronze" id="prog-juan-b" style="width:0%"></div></div></div>
-        <div class="progress-wrap"><div class="progress-label"><span>Prata</span><span>700 pts</span></div><div class="progress-bar"><div class="progress-fill pf-prata" id="prog-juan-p" style="width:0%"></div></div></div>
-        <div class="progress-wrap"><div class="progress-label"><span>Ouro</span><span>1100 pts</span></div><div class="progress-bar"><div class="progress-fill pf-ouro" id="prog-juan-o" style="width:0%"></div></div></div>
-        <div id="badge-juan" class="badge badge-none">Sem meta</div>
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">Recepcionistas</div>
-    <div class="person-grid">
-      <div class="person-card">
-        <div class="person-header"><div class="avatar av-a">A</div><div><div class="person-name">Adrielle</div><div class="person-role">Recepcionista</div></div></div>
-        <div class="pts-display" id="pts-adrielle">0</div>
-        <div class="pts-label">pontos no mês</div>
-        <div class="progress-wrap"><div class="progress-label"><span>Bronze</span><span>220 pts</span></div><div class="progress-bar"><div class="progress-fill pf-bronze" id="prog-adrielle-b" style="width:0%"></div></div></div>
-        <div class="progress-wrap"><div class="progress-label"><span>Prata</span><span>400 pts</span></div><div class="progress-bar"><div class="progress-fill pf-prata" id="prog-adrielle-p" style="width:0%"></div></div></div>
-        <div class="progress-wrap"><div class="progress-label"><span>Ouro</span><span>650 pts</span></div><div class="progress-bar"><div class="progress-fill pf-ouro" id="prog-adrielle-o" style="width:0%"></div></div></div>
-        <div id="badge-adrielle" class="badge badge-none">Sem meta</div>
-      </div>
-      <div class="person-card">
-        <div class="person-header"><div class="avatar av-r">R</div><div><div class="person-name">Raiany</div><div class="person-role">Recepcionista</div></div></div>
-        <div class="pts-display" id="pts-raiany">0</div>
-        <div class="pts-label">pontos no mês</div>
-        <div class="progress-wrap"><div class="progress-label"><span>Bronze</span><span>220 pts</span></div><div class="progress-bar"><div class="progress-fill pf-bronze" id="prog-raiany-b" style="width:0%"></div></div></div>
-        <div class="progress-wrap"><div class="progress-label"><span>Prata</span><span>400 pts</span></div><div class="progress-bar"><div class="progress-fill pf-prata" id="prog-raiany-p" style="width:0%"></div></div></div>
-        <div class="progress-wrap"><div class="progress-label"><span>Ouro</span><span>650 pts</span></div><div class="progress-bar"><div class="progress-fill pf-ouro" id="prog-raiany-o" style="width:0%"></div></div></div>
-        <div id="badge-raiany" class="badge badge-none">Sem meta</div>
-      </div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">Meta coletiva da barbearia</div>
-    <div class="coletiva-total" id="pts-coletiva">0</div>
-    <div class="pts-label">pontos somados (Marcus + Juan + Adrielle + Raiany)</div>
-    <div class="progress-wrap"><div class="progress-label"><span>Bronze — R$25 cada</span><span>1500 pts</span></div><div class="progress-bar"><div class="progress-fill pf-bronze" id="prog-col-b" style="width:0%"></div></div></div>
-    <div class="progress-wrap"><div class="progress-label"><span>Prata — R$75 cada</span><span>2500 pts</span></div><div class="progress-bar"><div class="progress-fill pf-prata" id="prog-col-p" style="width:0%"></div></div></div>
-    <div class="progress-wrap"><div class="progress-label"><span>Ouro — R$125 cada</span><span>3800 pts</span></div><div class="progress-bar"><div class="progress-fill pf-ouro" id="prog-col-o" style="width:0%"></div></div></div>
-    <div id="badge-coletiva" class="badge badge-none">Sem meta</div>
-  </div>
-</div>
+<div id="content">Carregando...</div>
 
-<!-- LANÇAR -->
-<div id="tab-lancar" class="panel">
-  <div class="card">
-    <div class="card-title">Quem está lançando?</div>
-    <select class="select-person" id="pessoa-sel">
-      <option value="">Selecione</option>
-      <option value="marcus">Marcus (barbeiro)</option>
-      <option value="juan">Juan (barbeiro)</option>
-      <option value="adrielle">Adrielle (recepcionista)</option>
-      <option value="raiany">Raiany (recepcionista)</option>
-    </select>
-  </div>
-  <div id="servicos-barbeiro" style="display:none">
-    <div class="card"><div class="card-title">Serviços extras</div><div class="service-grid" id="grid-servicos"></div></div>
-    <div class="card"><div class="card-title">Clientes avulsos</div><div class="service-grid">
-      <button class="service-btn" onclick="addPts(10,'Corte avulso')"><div class="svc-name">Corte avulso</div><div class="svc-pts">+10 pts</div></button>
-      <button class="service-btn" onclick="addPts(80,'Converteu assinante')"><div class="svc-name">Converteu assinante</div><div class="svc-pts">+80 pts</div></button>
-    </div></div>
-    <div class="card"><div class="card-title">Produtos vendidos</div><div class="service-grid">
-      <button class="service-btn" onclick="addPts(20,'Produto até R$60')"><div class="svc-name">Produto até R$60</div><div class="svc-pts">+20 pts</div></button>
-      <button class="service-btn" onclick="addPts(40,'Produto acima R$61')"><div class="svc-name">Produto acima R$61</div><div class="svc-pts">+40 pts</div></button>
-    </div></div>
-    <div class="card"><div class="card-title">Bar</div><div class="service-grid">
-      <button class="service-btn" onclick="addPts(5,'Item do bar vendido')"><div class="svc-name">Item do bar vendido</div><div class="svc-pts">+5 pts</div></button>
-    </div></div>
-    <div class="card"><div class="card-title">Histórico de hoje</div><div id="historico-barb" style="font-size:13px;color:#aaa">Nenhum lançamento ainda.</div></div>
-  </div>
-  <div id="servicos-recep" style="display:none">
-    <div class="card"><div class="card-title">Ações pontuáveis</div><div class="service-grid">
-      <button class="service-btn" onclick="addPts(5,'Agendamento convertido')"><div class="svc-name">Agendamento convertido</div><div class="svc-pts">+5 pts</div></button>
-      <button class="service-btn" onclick="addPts(20,'Produto até R$60')"><div class="svc-name">Produto até R$60</div><div class="svc-pts">+20 pts</div></button>
-      <button class="service-btn" onclick="addPts(40,'Produto acima R$61')"><div class="svc-name">Produto acima R$61</div><div class="svc-pts">+40 pts</div></button>
-      <button class="service-btn" onclick="addPts(50,'Converteu assinante')"><div class="svc-name">Converteu assinante</div><div class="svc-pts">+50 pts</div></button>
-      <button class="service-btn" onclick="addPts(15,'Reclamação resolvida')"><div class="svc-name">Reclamação resolvida</div><div class="svc-pts">+15 pts</div></button>
-      <button class="service-btn" onclick="addPts(5,'Item do bar vendido')"><div class="svc-name">Item do bar vendido</div><div class="svc-pts">+5 pts</div></button>
-    </div></div>
-    <div class="card"><div class="card-title">Histórico de hoje</div><div id="historico-recep" style="font-size:13px;color:#aaa">Nenhum lançamento ainda.</div></div>
-  </div>
-</div>
-
-<!-- METAS -->
-<div id="tab-metas" class="panel">
-  <div class="card">
-    <div class="card-title">Metas individuais — barbeiros</div>
-    <div class="meta-row">
-      <div class="meta-card"><div class="meta-nivel">Bronze</div><div class="meta-pts">400 pts</div><div class="meta-premio">R$100</div></div>
-      <div class="meta-card"><div class="meta-nivel">Prata</div><div class="meta-pts">700 pts</div><div class="meta-premio">R$150</div></div>
-      <div class="meta-card"><div class="meta-nivel">Ouro</div><div class="meta-pts">1100 pts</div><div class="meta-premio">R$400</div></div>
-    </div>
-    <div class="info-box">Quem terminar o mês com mais pontos leva +R$150 de bônus campeão.</div>
-  </div>
-  <div class="card">
-    <div class="card-title">Meta coletiva — toda a equipe</div>
-    <div class="meta-row">
-      <div class="meta-card"><div class="meta-nivel">Bronze</div><div class="meta-pts">1500 pts</div><div class="meta-premio">R$25 cada</div></div>
-      <div class="meta-card"><div class="meta-nivel">Prata</div><div class="meta-pts">2500 pts</div><div class="meta-premio">R$75 cada</div></div>
-      <div class="meta-card"><div class="meta-nivel">Ouro</div><div class="meta-pts">3800 pts</div><div class="meta-premio">R$125 cada</div></div>
-    </div>
-    <div class="info-box">Prêmio total: Bronze R$100 · Prata R$300 · Ouro R$500, dividido em 4 partes iguais.</div>
-  </div>
-  <div class="card">
-    <div class="card-title">Metas individuais — recepcionistas</div>
-    <div class="meta-row">
-      <div class="meta-card"><div class="meta-nivel">Bronze</div><div class="meta-pts">220 pts</div><div class="meta-premio">R$100</div></div>
-      <div class="meta-card"><div class="meta-nivel">Prata</div><div class="meta-pts">400 pts</div><div class="meta-premio">R$200</div></div>
-      <div class="meta-card"><div class="meta-nivel">Ouro</div><div class="meta-pts">650 pts</div><div class="meta-premio">R$300</div></div>
-    </div>
-  </div>
-  <div class="card">
-    <div class="card-title">Tabela de pontuação — barbeiros</div>
-    <div class="info-box">Acabamento: 10 · Penteado / Navalha / Design cera / Esfoliação facial / Máscara / Pigmentação / Depilação: 15 · Hidratação / Esfoliação capilar / Terapia facial / Camuflagem: 25 · Selagem / Botox topo: 40 · Botox completo: 60<br><br>Corte avulso: 10 · Converteu assinante: 80 · Produto até R$60: 20 · Produto acima R$61: 40 · Item do bar: 5</div>
-  </div>
-  <div class="card">
-    <div class="card-title">Tabela de pontuação — recepcionistas</div>
-    <div class="info-box">Agendamento convertido: 5 · Item do bar: 5 · Reclamação resolvida: 15 · Produto até R$60: 20 · Produto acima R$61: 40 · Converteu assinante: 50</div>
-  </div>
-  <div class="card">
-    <div class="card-title">Encerrar mês</div>
-    <div class="info-box">Zera os pontos de todos e inicia novo ciclo. Apenas o dono deve fazer isso.</div>
-    <button class="reset-btn" onclick="confirmarReset()">Zerar e iniciar novo mês</button>
-  </div>
-</div>
-
-<!-- RANKING -->
-<div id="tab-ranking" class="panel">
-  <div class="card"><div class="card-title">Ranking — barbeiros</div><div id="ranking-barb"></div></div>
-  <div class="card"><div class="card-title">Ranking — recepcionistas</div><div id="ranking-recep"></div></div>
-  <div class="card"><div class="card-title">Disputa — campeão do mês</div><div id="disputa-info" class="info-box"></div></div>
-</div>
-
-<!-- ADMIN -->
-<div id="tab-admin" class="panel">
-  <div class="card">
-    <div id="admin-lock-screen" class="admin-lock">
-      <div style="font-size:32px;margin-bottom:12px">🔐</div>
-      <h3>Área do Admin</h3>
-      <p>Acesso restrito ao dono da barbearia.</p>
-      <div class="admin-input-wrap">
-        <input class="admin-input" type="password" id="admin-senha" placeholder="Senha" onkeydown="if(event.key==='Enter')verificarSenha()">
-        <button class="admin-btn" onclick="verificarSenha()">Entrar</button>
-      </div>
-      <div id="admin-erro" style="font-size:12px;color:#e24b4a;margin-top:10px;display:none">Senha incorreta.</div>
-    </div>
-    <div id="admin-content" class="admin-content">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
-        <div style="font-size:14px;font-weight:600;color:#1a1a1a">Painel do Admin</div>
-        <button class="admin-logout" onclick="adminLogout()">Sair</button>
-      </div>
-      <div id="admin-body"></div>
-    </div>
-  </div>
-</div>
-
-</div>
-<div class="toast" id="toast"></div>
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
+<script>
+/* ---------- storage helpers (Firestore) ---------- */
+// Objeto vindo do Firebase (Configurações do projeto > Geral > Seus apps > Web).
+// Substitua os valores abaixo pelos do seu projeto antes de publicar o site.
 const firebaseConfig = {
-  apiKey: "AIzaSyBFWzZRdckVMNugQeYHeqAI2EtaEThM2I4",
-  authDomain: "barbearia-tribo.firebaseapp.com",
-  projectId: "barbearia-tribo",
-  storageBucket: "barbearia-tribo.firebasestorage.app",
-  messagingSenderId: "785366711071",
-  appId: "1:785366711071:web:dd053b47e6b78a09b30e2a"
+  apiKey: "AIzaSyDCoZmCWQIQH_k7WCu0qHbaQq57ZiWqM9Y",
+  authDomain: "caixa-tribo-barbearia.firebaseapp.com",
+  projectId: "caixa-tribo-barbearia",
+  storageBucket: "caixa-tribo-barbearia.firebasestorage.app",
+  messagingSenderId: "564183909709",
+  appId: "1:564183909709:web:7eeac8e5c14eeaaf84e304"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+let db = null;
 
-const SERVICOS_BARB = [
-  {nome:'Acabamento (pezinho)',pts:10},{nome:'Penteado',pts:15},
-  {nome:'Design sobrancelha navalha',pts:15},{nome:'Design sobrancelha cera',pts:15},
-  {nome:'Esfoliação facial',pts:15},{nome:'Máscara Black',pts:15},
-  {nome:'Pigmentação barba',pts:15},{nome:'Pigmentação cabelo',pts:15},
-  {nome:'Depilação nariz',pts:15},{nome:'Depilação orelha',pts:15},
-  {nome:'Hidratação',pts:25},{nome:'Esfoliação capilar',pts:25},
-  {nome:'Terapia facial',pts:25},{nome:'Camuflagem fios brancos',pts:25},
-  {nome:'Selagem',pts:40},{nome:'Botox topo',pts:40},{nome:'Botox completo',pts:60}
-];
-
-const MESES=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-const DIAS=['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
-let estado={marcus:{pts:0,hist:[]},juan:{pts:0,hist:[]},adrielle:{pts:0,hist:[]},raiany:{pts:0,hist:[]}};
-let ultimoLancamento=null;
-let adminLogado=false;
-
-function getMesAtual(){const d=new Date();return MESES[d.getMonth()]+' '+d.getFullYear();}
-function getDocId(){const d=new Date();return d.getFullYear()+'-'+(d.getMonth()+1);}
-function getDayKey(ts){const d=new Date(ts);return DIAS[d.getDay()]+', '+d.getDate()+'/'+('0'+(d.getMonth()+1)).slice(-2);}
-
-document.getElementById('mes-atual').textContent=getMesAtual();
-
-const docRef=doc(db,'pontos',getDocId());
-onSnapshot(docRef,(snap)=>{
-  document.getElementById('sync-dot').className='sync-dot online';
-  document.getElementById('sync-label').textContent='Sincronizado';
-  if(snap.exists()){
-    const data=snap.data();
-    Object.keys(estado).forEach(k=>{if(data[k])estado[k]=data[k];});
-    updateUI();
-    const activeTab=document.querySelector('.tab.active');
-    if(activeTab&&activeTab.textContent.trim()==='Ranking') renderRanking();
-    if(adminLogado) renderAdminBody();
+async function initFirebase(){
+  const isConfigured = firebaseConfig.apiKey && !firebaseConfig.apiKey.startsWith('COLE_AQUI');
+  if(!isConfigured){
+    document.getElementById('content').innerHTML = `
+      <div class="card" style="max-width:520px; margin:60px auto;">
+        <h3>Falta configurar o Firebase</h3>
+        <p style="color:var(--muted); font-size:13.5px; line-height:1.5;">
+          Abra o arquivo HTML deste site e substitua o objeto <code>firebaseConfig</code>,
+          perto do topo do código, pelos valores do seu projeto no Firebase
+          (Configurações do projeto &gt; Geral &gt; Seus apps &gt; Web).
+          Sem isso o app não tem onde salvar os dados.
+        </p>
+      </div>`;
+    throw new Error('Firebase não configurado');
   }
-},()=>{
-  document.getElementById('sync-dot').className='sync-dot offline';
-  document.getElementById('sync-label').textContent='Sem conexão';
-});
+  const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js');
+  const { getFirestore, doc, getDoc, setDoc } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js');
+  const { getAuth, signInAnonymously } = await import('https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js');
 
-async function saveToFirebase(){
-  try{await setDoc(docRef,estado,{merge:true});}
-  catch(e){showToast('Erro ao salvar. Verifique a conexão.');}
+  const app = initializeApp(firebaseConfig);
+  db = getFirestore(app);
+  const auth = getAuth(app);
+  await signInAnonymously(auth);
+
+  window._fs = { doc, getDoc, setDoc };
 }
 
-window.showTab=function(t,btn){
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
-  document.getElementById('tab-'+t).classList.add('active');
-  btn.classList.add('active');
-  if(t==='ranking') renderRanking();
-  if(t==='admin'&&adminLogado) renderAdminBody();
+async function getData(collectionName, key){
+  try{
+    const { doc, getDoc } = window._fs;
+    const ref = doc(db, collectionName, key);
+    const snap = await getDoc(ref);
+    return snap.exists() ? snap.data().payload : null;
+  }catch(e){ console.error('firestore get error', e); return null; }
+}
+async function setData(collectionName, key, value){
+  try{
+    const { doc, setDoc } = window._fs;
+    const ref = doc(db, collectionName, key);
+    await setDoc(ref, { payload: value, updatedAt: new Date().toISOString() });
+    return true;
+  }catch(e){ console.error('firestore set error', e); alert('Não foi possível salvar. Verifique sua conexão.'); return false; }
+}
+
+/* ---------- constants ---------- */
+const MESES = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const ENTRADA_CATS = ['Serviços do dia','Assinatura','Saldo anterior','Venda de produto','Outras entradas'];
+const SAIDA_CATS = ['Salário/Comissão','Adiantamento','Fornecedor/Produtos','Aluguel','Energia','Água','Internet','Marketing','Sistema/Assinatura','Manutenção','Outros'];
+const PAYABLE_CATS = ['Fornecedor','Salário','Despesa Fixa','Outros'];
+const PAYABLE_TO_SAIDA = {'Fornecedor':'Fornecedor/Produtos','Salário':'Salário/Comissão','Despesa Fixa':'Outros','Outros':'Outros'};
+const FUNCIONARIOS = ['Juan','Marcus','Raiane','Adrielly','Angelo','Diego','Outro'];
+
+// Login simples por usuário e senha. Isso NÃO é segurança forte: qualquer pessoa
+// que abrir o código-fonte do site (F12 > Fontes) consegue ler essas senhas.
+// Serve pra impedir que alguém abra o link por acaso e comece a editar o caixa,
+// não pra proteger contra alguém que sabe o que está fazendo.
+const USERS = {
+  'diego': { senha: 'diego123', nome: 'Diego' },
+  'bianca': { senha: 'bianca123', nome: 'Bianca' },
+  'johann': { senha: 'johann123', nome: 'Johann' }
 };
 
-document.getElementById('pessoa-sel').addEventListener('change',function(){
-  const v=this.value;
-  document.getElementById('servicos-barbeiro').style.display=(v==='marcus'||v==='juan')?'block':'none';
-  document.getElementById('servicos-recep').style.display=(v==='adrielle'||v==='raiany')?'block':'none';
-  renderHistorico();
-});
-
-function renderServicos(){
-  document.getElementById('grid-servicos').innerHTML=SERVICOS_BARB.map(s=>
-    `<button class="service-btn" onclick="addPts(${s.pts},'${s.nome}')"><div class="svc-name">${s.nome}</div><div class="svc-pts">+${s.pts} pts</div></button>`
-  ).join('');
+/* ---------- utils ---------- */
+function todayISO(){
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function monthKeyOf(d){ return d.slice(0,7); }
+function monthLabel(key){ const [y,m] = key.split('-'); return MESES[parseInt(m,10)-1] + ' ' + y; }
+function fmtMoney(n){ return (n||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'}); }
+function fmtDateBR(d){ const [y,m,day] = d.split('-'); return day+'/'+m+'/'+y; }
+function genId(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function shiftMonth(key, delta){
+  const [y,m] = key.split('-').map(Number);
+  const d = new Date(y, m-1+delta, 1);
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
 }
 
-window.addPts=function(pts,label){
-  const p=document.getElementById('pessoa-sel').value;
-  if(!p){showToast('Selecione uma pessoa primeiro');return;}
-  estado[p].pts+=pts;
-  const entry={label,pts,hora:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),ts:Date.now(),id:Date.now()};
-  estado[p].hist.push(entry);
-  ultimoLancamento={pessoa:p,pts,id:entry.id};
-  saveToFirebase();updateUI();renderHistorico();
-  showToast('+'+pts+' pts — '+label);
+/* ---------- state ---------- */
+let state = {
+  activeTab: 'hoje',
+  currentMonth: monthKeyOf(todayISO()),
+  monthCache: {},
+  payablesCache: {},
+  entryForm: { type:'entrada', date: todayISO(), category: ENTRADA_CATS[0], description:'', amount:'', funcionario:'' },
+  payableForm: { dueDate: todayISO(), category: PAYABLE_CATS[0], description:'', amount:'', funcionario:'' },
+  extrato: { start:'', end:'', result:null },
+  editingEntry: null,
+  editingPayable: null,
+  currentUser: null,
+  loaded:false
 };
 
-window.desfazerUltimo=function(){
-  if(!ultimoLancamento) return;
-  const{pessoa,pts,id}=ultimoLancamento;
-  estado[pessoa].pts=Math.max(0,estado[pessoa].pts-pts);
-  estado[pessoa].hist=estado[pessoa].hist.filter(h=>h.id!==id);
-  ultimoLancamento=null;
-  saveToFirebase();updateUI();renderHistorico();
-  showToast('Lançamento desfeito');
-};
-
-function renderHistorico(){
-  const p=document.getElementById('pessoa-sel').value;
-  if(!p) return;
-  const h=estado[p].hist;
-  const isBarbeiro=p==='marcus'||p==='juan';
-  const el=document.getElementById(isBarbeiro?'historico-barb':'historico-recep');
-  if(!el) return;
-  if(h.length===0){el.innerHTML='Nenhum lançamento ainda.';return;}
-  el.innerHTML=[...h].reverse().slice(0,10).map((x,i)=>
-    `<div class="hist-row">
-      <span>${x.label}</span>
-      <span style="color:#aaa">${x.hora}&nbsp;<strong style="color:#82b800">+${x.pts}</strong>${i===0?`<button class="undo-btn" onclick="desfazerUltimo()">desfazer</button>`:''}</span>
-    </div>`
-  ).join('');
+async function loadMonth(key){
+  if(state.monthCache[key]) return state.monthCache[key];
+  let d = await getData('meses', key);
+  if(!d) d = { openingBalance:0, entries:[] };
+  state.monthCache[key] = d;
+  return d;
+}
+async function saveMonth(key){
+  await setData('meses', key, state.monthCache[key]);
+}
+async function loadPayables(key){
+  if(state.payablesCache[key]) return state.payablesCache[key];
+  let d = await getData('contas', key);
+  if(!d) d = [];
+  state.payablesCache[key] = d;
+  return d;
+}
+async function savePayables(key){
+  await setData('contas', key, state.payablesCache[key]);
 }
 
-function setProgress(id,val,max){const el=document.getElementById(id);if(el)el.style.width=Math.min(100,Math.round((val/max)*100))+'%';}
-
-function calcBadge(pts,niveis){
-  if(pts>=niveis[2]) return{txt:'Ouro',cls:'badge-ouro'};
-  if(pts>=niveis[1]) return{txt:'Prata',cls:'badge-prata'};
-  if(pts>=niveis[0]) return{txt:'Bronze',cls:'badge-bronze'};
-  return{txt:'Sem meta',cls:'badge-none'};
+function monthTotals(key){
+  const data = state.monthCache[key] || {openingBalance:0, entries:[]};
+  const entries = [...data.entries].sort((a,b)=> a.date.localeCompare(b.date) || 0);
+  let running = data.openingBalance;
+  const rows = entries.map(e=>{
+    running += (e.type==='entrada' ? e.amount : -e.amount);
+    return {...e, saldo: running};
+  });
+  const totalEntrada = entries.filter(e=>e.type==='entrada').reduce((s,e)=>s+e.amount,0);
+  const totalSaida = entries.filter(e=>e.type==='saida').reduce((s,e)=>s+e.amount,0);
+  return { rows, totalEntrada, totalSaida, saldoFinal: running, openingBalance: data.openingBalance };
 }
 
-function updateUI(){
-  const m=estado.marcus.pts,j=estado.juan.pts,a=estado.adrielle.pts,r=estado.raiany.pts,col=m+j+a+r;
-  document.getElementById('pts-marcus').textContent=m;
-  document.getElementById('pts-juan').textContent=j;
-  document.getElementById('pts-adrielle').textContent=a;
-  document.getElementById('pts-raiany').textContent=r;
-  document.getElementById('pts-coletiva').textContent=col;
-  setProgress('prog-marcus-b',m,400);setProgress('prog-marcus-p',m,700);setProgress('prog-marcus-o',m,1100);
-  setProgress('prog-juan-b',j,400);setProgress('prog-juan-p',j,700);setProgress('prog-juan-o',j,1100);
-  setProgress('prog-adrielle-b',a,220);setProgress('prog-adrielle-p',a,400);setProgress('prog-adrielle-o',a,650);
-  setProgress('prog-raiany-b',r,220);setProgress('prog-raiany-p',r,400);setProgress('prog-raiany-o',r,650);
-  setProgress('prog-col-b',col,1500);setProgress('prog-col-p',col,2500);setProgress('prog-col-o',col,3800);
-  ['marcus','juan'].forEach(p=>{const b=calcBadge(estado[p].pts,[400,700,1100]);const el=document.getElementById('badge-'+p);el.textContent=b.txt;el.className='badge '+b.cls;});
-  ['adrielle','raiany'].forEach(p=>{const b=calcBadge(estado[p].pts,[220,400,650]);const el=document.getElementById('badge-'+p);el.textContent=b.txt;el.className='badge '+b.cls;});
-  const bc=calcBadge(col,[1500,2500,3800]);
-  const ec=document.getElementById('badge-coletiva');ec.textContent=bc.txt;ec.className='badge '+bc.cls;
+function sumAdiantamentos(monthKey, funcionario){
+  const data = state.monthCache[monthKey];
+  if(!data || !funcionario) return 0;
+  return data.entries
+    .filter(e => e.type==='saida' && e.category==='Adiantamento' && e.funcionario===funcionario)
+    .reduce((s,e)=>s+e.amount, 0);
 }
 
-function renderRanking(){
-  const barb=[{n:'Marcus',p:estado.marcus.pts,av:'av-m'},{n:'Juan',p:estado.juan.pts,av:'av-j'}].sort((a,b)=>b.p-a.p);
-  const recep=[{n:'Adrielle',p:estado.adrielle.pts,av:'av-a'},{n:'Raiany',p:estado.raiany.pts,av:'av-r'}].sort((a,b)=>b.p-a.p);
-  const ranks=['r1','r2'];
-  document.getElementById('ranking-barb').innerHTML=barb.map((x,i)=>`<div class="ranking-item"><div class="rank-num ${ranks[i]}">${i+1}</div><div class="avatar ${x.av}" style="width:32px;height:32px;font-size:12px">${x.n[0]}</div><div class="rank-name">${x.n}</div><div class="rank-pts">${x.p} pts</div></div>`).join('');
-  document.getElementById('ranking-recep').innerHTML=recep.map((x,i)=>`<div class="ranking-item"><div class="rank-num ${ranks[i]}">${i+1}</div><div class="avatar ${x.av}" style="width:32px;height:32px;font-size:12px">${x.n[0]}</div><div class="rank-name">${x.n}</div><div class="rank-pts">${x.p} pts</div></div>`).join('');
-  const mv=estado.marcus.pts,jv=estado.juan.pts;
-  let d='';
-  if(mv===0&&jv===0) d='Nenhum ponto lançado ainda. Que comecem!';
-  else if(mv===jv) d='Empate com '+mv+' pts cada. O mês ainda não acabou.';
-  else{const lider=mv>jv?'Marcus':'Juan';const vant=Math.abs(mv-jv);d=lider+' está na frente por '+vant+' pts. Bônus de R$150 em jogo.';}
-  document.getElementById('disputa-info').textContent=d;
+/* ---------- login ---------- */
+function checkSavedLogin(){
+  const saved = localStorage.getItem('tribo-user');
+  if(saved && USERS[saved]) state.currentUser = saved;
+}
+function doLogin(username, senha){
+  const u = USERS[username];
+  if(!u || u.senha !== senha) return false;
+  state.currentUser = username;
+  localStorage.setItem('tribo-user', username);
+  return true;
+}
+function doLogout(){
+  state.currentUser = null;
+  localStorage.removeItem('tribo-user');
+  render();
+}
+function renderLogin(errorMsg){
+  return `
+  <div style="max-width:340px; margin:70px auto; padding:0 16px;">
+    <div class="card">
+      <h3 style="text-align:center; margin-bottom:16px;">Entrar</h3>
+      ${errorMsg ? `<p style="color:var(--saida); font-size:12.5px; text-align:center;">${errorMsg}</p>` : ''}
+      <label>Usuário</label>
+      <input type="text" id="login-user" autocomplete="username" placeholder="diego, bianca ou johann">
+      <label>Senha</label>
+      <input type="password" id="login-pass" autocomplete="current-password">
+      <button class="btn btn-primary" data-act="do-login" style="width:100%; margin-top:6px;">Entrar</button>
+    </div>
+  </div>`;
 }
 
-// ADMIN
-const PESSOAS_INFO=[
-  {key:'marcus',nome:'Marcus',role:'Barbeiro',av:'av-m'},
-  {key:'juan',nome:'Juan',role:'Barbeiro',av:'av-j'},
-  {key:'adrielle',nome:'Adrielle',role:'Recepcionista',av:'av-a'},
-  {key:'raiany',nome:'Raiany',role:'Recepcionista',av:'av-r'}
-];
-
-window.verificarSenha=function(){
-  const senha=document.getElementById('admin-senha').value;
-  if(senha==='midia123'){
-    adminLogado=true;
-    document.getElementById('admin-lock-screen').style.display='none';
-    document.getElementById('admin-content').style.display='block';
-    renderAdminBody();
+/* ---------- mutations ---------- */
+async function addEntry(form){
+  const key = monthKeyOf(form.date);
+  await loadMonth(key);
+  state.monthCache[key].entries.push({
+    id: genId(), date: form.date, type: form.type, category: form.category,
+    description: form.description || form.category, amount: parseFloat(form.amount),
+    funcionario: form.funcionario || null,
+    criadoPor: USERS[state.currentUser] ? USERS[state.currentUser].nome : state.currentUser
+  });
+  await saveMonth(key);
+  if(key !== state.currentMonth){ /* keep currentMonth as is, just note it landed elsewhere */ }
+  render();
+}
+async function deleteEntry(key, id){
+  if(!confirm('Excluir este lançamento?')) return;
+  state.monthCache[key].entries = state.monthCache[key].entries.filter(e=>e.id!==id);
+  await saveMonth(key);
+  render();
+}
+async function updateEntry(oldKey, id, form){
+  await loadMonth(oldKey);
+  const idx = state.monthCache[oldKey].entries.findIndex(e=>e.id===id);
+  if(idx===-1) return;
+  const original = state.monthCache[oldKey].entries[idx];
+  const newKey = monthKeyOf(form.date);
+  const updated = {
+    ...original,
+    date: form.date, type: form.type, category: form.category,
+    description: form.description || form.category, amount: parseFloat(form.amount),
+    funcionario: form.funcionario || null
+  };
+  if(newKey === oldKey){
+    state.monthCache[oldKey].entries[idx] = updated;
+    await saveMonth(oldKey);
   } else {
-    document.getElementById('admin-erro').style.display='block';
-    document.getElementById('admin-senha').value='';
+    state.monthCache[oldKey].entries.splice(idx,1);
+    await saveMonth(oldKey);
+    await loadMonth(newKey);
+    state.monthCache[newKey].entries.push(updated);
+    await saveMonth(newKey);
   }
-};
+  render();
+}
+async function updateOpeningBalance(key, val){
+  await loadMonth(key);
+  state.monthCache[key].openingBalance = parseFloat(val)||0;
+  await saveMonth(key);
+  render();
+}
+async function addPayable(form){
+  const key = monthKeyOf(form.dueDate);
+  await loadPayables(key);
+  state.payablesCache[key].push({
+    id: genId(), dueDate: form.dueDate, category: form.category,
+    description: form.description || form.category, amount: parseFloat(form.amount),
+    status:'pendente', paidEntryId:null, funcionario: form.funcionario || null,
+    criadoPor: USERS[state.currentUser] ? USERS[state.currentUser].nome : state.currentUser
+  });
+  await savePayables(key);
+  render();
+}
+async function deletePayable(key, id){
+  if(!confirm('Excluir esta conta?')) return;
+  const p = state.payablesCache[key].find(x=>x.id===id);
+  if(p && p.paidEntryId){
+    await loadMonth(key);
+    state.monthCache[key].entries = state.monthCache[key].entries.filter(e=>e.id!==p.paidEntryId);
+    await saveMonth(key);
+  }
+  state.payablesCache[key] = state.payablesCache[key].filter(x=>x.id!==id);
+  await savePayables(key);
+  render();
+}
+async function updatePayable(oldKey, id, form){
+  await loadPayables(oldKey);
+  const idx = state.payablesCache[oldKey].findIndex(p=>p.id===id);
+  if(idx===-1) return;
+  const original = state.payablesCache[oldKey][idx];
+  const newAmount = parseFloat(form.amount);
+  const newKey = monthKeyOf(form.dueDate);
 
-window.adminLogout=function(){
-  adminLogado=false;
-  document.getElementById('admin-lock-screen').style.display='block';
-  document.getElementById('admin-content').style.display='none';
-  document.getElementById('admin-senha').value='';
-  document.getElementById('admin-erro').style.display='none';
-};
+  // Se já está paga e tem lançamento vinculado, atualiza o lançamento pra bater com o novo valor/descrição.
+  if(original.status === 'pago' && original.paidEntryId){
+    const linkedKey = original.paidEntryMonth || oldKey;
+    await loadMonth(linkedKey);
+    const eIdx = state.monthCache[linkedKey].entries.findIndex(e=>e.id===original.paidEntryId);
+    if(eIdx !== -1){
+      state.monthCache[linkedKey].entries[eIdx].amount = newAmount;
+      state.monthCache[linkedKey].entries[eIdx].description = 'Pagamento: ' + (form.description || form.category);
+      state.monthCache[linkedKey].entries[eIdx].funcionario = form.funcionario || null;
+      await saveMonth(linkedKey);
+    }
+  }
 
-window.removerLancamento=function(pessoaKey, entryId){
-  const entry=estado[pessoaKey].hist.find(h=>h.id===entryId);
-  if(!entry) return;
-  if(!confirm('Remover "'+entry.label+'" (+'+entry.pts+' pts) de '+pessoaKey+'? Os pontos serão descontados.')) return;
-  estado[pessoaKey].pts=Math.max(0,estado[pessoaKey].pts-entry.pts);
-  estado[pessoaKey].hist=estado[pessoaKey].hist.filter(h=>h.id!==entryId);
-  saveToFirebase();
-  updateUI();
-  renderAdminBody();
-  showToast('Lançamento removido.');
-};
+  const updated = {
+    ...original, dueDate: form.dueDate, category: form.category,
+    description: form.description || form.category, amount: newAmount,
+    funcionario: form.funcionario || null
+  };
+  if(newKey === oldKey){
+    state.payablesCache[oldKey][idx] = updated;
+    await savePayables(oldKey);
+  } else {
+    state.payablesCache[oldKey].splice(idx,1);
+    await savePayables(oldKey);
+    await loadPayables(newKey);
+    state.payablesCache[newKey].push(updated);
+    await savePayables(newKey);
+  }
+  render();
+}
+async function togglePaid(key, id){
+  const list = state.payablesCache[key];
+  const p = list.find(x=>x.id===id);
+  if(p.status === 'pendente'){
+    const paymentDate = todayISO();
+    const entryKey = monthKeyOf(paymentDate);
+    await loadMonth(entryKey);
+    const valorAPagar = restanteAPagar(p, key);
+    if(valorAPagar <= 0){
+      alert('O adiantamento já dado cobre ou passa do valor dessa conta. Nada a lançar como saída. Marcando como paga mesmo assim.');
+    }
+    const entryId = genId();
+    if(valorAPagar > 0){
+      state.monthCache[entryKey].entries.push({
+        id: entryId, date: paymentDate, type:'saida',
+        category: PAYABLE_TO_SAIDA[p.category] || 'Outros',
+        description: 'Pagamento: ' + p.description + (valorAPagar !== p.amount ? ' (já descontado adiantamento)' : ''),
+        amount: valorAPagar,
+        funcionario: p.funcionario || null
+      });
+      await saveMonth(entryKey);
+    }
+    p.status = 'pago';
+    p.paidEntryId = valorAPagar > 0 ? entryId : null;
+    p.paidEntryMonth = valorAPagar > 0 ? entryKey : null;
+  } else {
+    const entryKey = p.paidEntryMonth || key;
+    if(p.paidEntryId){
+      await loadMonth(entryKey);
+      state.monthCache[entryKey].entries = state.monthCache[entryKey].entries.filter(e=>e.id!==p.paidEntryId);
+      await saveMonth(entryKey);
+    }
+    p.status = 'pendente';
+    p.paidEntryId = null;
+    p.paidEntryMonth = null;
+  }
+  await savePayables(key);
+  render();
+}
 
-function renderAdminBody(){
-  const body=document.getElementById('admin-body');
-  body.innerHTML=PESSOAS_INFO.map((p,idx)=>{
-    const h=estado[p.key].hist;
-    const pts=estado[p.key].pts;
-    const grupos={};
-    [...h].reverse().forEach(x=>{
-      const day=x.ts?getDayKey(x.ts):'Sem data';
-      if(!grupos[day]) grupos[day]=[];
-      grupos[day].push(x);
-    });
-    const histHTML=Object.keys(grupos).length===0
-      ?'<div class="admin-empty">Nenhum lançamento ainda.</div>'
-      :Object.entries(grupos).map(([day,items])=>`
-        <div class="day-group-title">${day}</div>
-        ${items.map(x=>`
-          <div class="admin-hist-row">
-            <span class="admin-hist-label">${x.label}</span>
-            <div style="display:flex;align-items:center;gap:4px">
-              <span class="admin-hist-meta">${x.hora||''}</span>
-              <span class="admin-hist-pts">+${x.pts}</span>
-              <button class="admin-remove-btn" onclick="removerLancamento('${p.key}',${x.id})">remover</button>
-            </div>
-          </div>
-        `).join('')}
-      `).join('');
-    return `
-      <div class="admin-person-block">
-        <div class="admin-person-title">
-          <div class="avatar ${p.av}" style="width:32px;height:32px;font-size:12px">${p.nome[0]}</div>
-          <span class="admin-person-name">${p.nome}</span>
-          <span class="admin-person-pts">${pts} pts</span>
-          <span style="font-size:12px;color:#aaa;margin-left:4px">${p.role}</span>
-        </div>
-        ${histHTML}
+/* ---------- render ---------- */
+function render(){
+  const tabsEl = document.getElementById('tabs');
+  const el = document.getElementById('content');
+
+  if(!state.currentUser){
+    tabsEl.innerHTML = '';
+    el.innerHTML = renderLogin(state.loginError);
+    attachEvents();
+    return;
+  }
+
+  renderTabs();
+  if(state.activeTab==='hoje') el.innerHTML = renderHoje();
+  else if(state.activeTab==='mes') { el.innerHTML = renderMes(); drawChart(); }
+  else if(state.activeTab==='contas') el.innerHTML = renderContas();
+  else if(state.activeTab==='extrato') el.innerHTML = renderExtrato();
+  attachEvents();
+}
+
+function renderTabs(){
+  const tabs = [['hoje','Hoje'],['mes','Livro do Mês'],['contas','Contas a Pagar'],['extrato','Extrato PDF']];
+  document.getElementById('tabs').innerHTML = tabs.map(([k,l])=>
+    `<button class="tab-btn ${state.activeTab===k?'active':''}" data-tab="${k}">${l}</button>`
+  ).join('') + `<button class="tab-btn" data-act="logout" style="flex:0 0 auto; color:var(--muted);" title="Sair">${USERS[state.currentUser].nome} · Sair</button>`;
+}
+
+function entryFormHTML(prefix){
+  const f = state.entryForm;
+  const cats = f.type==='entrada' ? ENTRADA_CATS : SAIDA_CATS;
+  const precisaFuncionario = f.type==='saida' && (f.category==='Adiantamento' || f.category==='Salário/Comissão');
+  const jaAdiantado = precisaFuncionario && f.funcionario ? sumAdiantamentos(state.currentMonth, f.funcionario) : 0;
+  return `
+  <div class="card">
+    <h3>${state.editingEntry ? 'Editar lançamento' : 'Novo lançamento'}</h3>
+    <div class="type-toggle">
+      <button data-act="set-type" data-val="entrada" class="${f.type==='entrada'?'sel-entrada':''}">Entrada</button>
+      <button data-act="set-type" data-val="saida" class="${f.type==='saida'?'sel-saida':''}">Saída</button>
+    </div>
+    <div class="grid2">
+      <div><label>Data</label><input type="date" id="ef-date" value="${f.date}"></div>
+      <div><label>Categoria</label>
+        <select id="ef-cat">${cats.map(c=>`<option ${c===f.category?'selected':''}>${c}</option>`).join('')}</select>
       </div>
-      ${idx<PESSOAS_INFO.length-1?'<div class="admin-divider"></div>':''}
-    `;
-  }).join('');
+    </div>
+    ${precisaFuncionario ? `
+    <label>Funcionário</label>
+    <select id="ef-func">
+      <option value="">Selecione...</option>
+      ${FUNCIONARIOS.map(n=>`<option ${n===f.funcionario?'selected':''}>${n}</option>`).join('')}
+    </select>
+    ${f.funcionario && f.category==='Adiantamento' ? `<p style="font-size:11.5px; color:var(--amber); margin:-4px 0 10px;">Adiantado a ${f.funcionario} este mês (antes deste lançamento): ${fmtMoney(jaAdiantado)}</p>` : ''}
+    ${f.funcionario && f.category==='Salário/Comissão' ? `<p style="font-size:11.5px; color:var(--amber); margin:-4px 0 10px;">${f.funcionario} já recebeu ${fmtMoney(jaAdiantado)} em adiantamento este mês. Desconta isso do valor do salário antes de lançar.</p>` : ''}
+    ` : ''}
+    <label>Descrição</label>
+    <input type="text" id="ef-desc" placeholder="Ex: Serviços do dia, pagamento fornecedor..." value="${f.description}">
+    <label>Valor (R$)</label>
+    <input type="number" id="ef-amount" step="0.01" min="0" placeholder="0,00" value="${f.amount}">
+    <button class="btn ${f.type==='entrada'?'btn-entrada':'btn-saida'}" data-act="save-entry" style="width:100%;">
+      ${state.editingEntry ? 'Salvar alteração' : ('Salvar ' + (f.type==='entrada'?'entrada':'saída'))}
+    </button>
+    ${state.editingEntry ? `<button class="btn btn-ghost" data-act="cancel-edit-entry" style="width:100%; margin-top:8px;">Cancelar edição</button>` : ''}
+  </div>`;
 }
 
-window.confirmarReset=function(){
-  if(confirm('Zerar todos os pontos e iniciar novo mês? Esta ação não pode ser desfeita.')){
-    Object.keys(estado).forEach(p=>{estado[p].pts=0;estado[p].hist=[];});
-    saveToFirebase();updateUI();
-    showToast('Novo mês iniciado. Pontos zerados.');
+function renderHoje(){
+  const today = todayISO();
+  const key = monthKeyOf(today);
+  loadMonth(key); // fire and forget; will be cached by first load at boot
+  const data = state.monthCache[key] || {openingBalance:0, entries:[]};
+  const todays = data.entries.filter(e=>e.date===today).sort((a,b)=>0);
+  const totE = todays.filter(e=>e.type==='entrada').reduce((s,e)=>s+e.amount,0);
+  const totS = todays.filter(e=>e.type==='saida').reduce((s,e)=>s+e.amount,0);
+  const ateHoje = data.entries.filter(e=>e.date<=today);
+  const saldoTotal = data.openingBalance + ateHoje.reduce((s,e)=> s + (e.type==='entrada'?e.amount:-e.amount), 0);
+
+  return `
+    <div class="card">
+      <h3>Saldo em caixa agora</h3>
+      <div class="n mono" style="font-size:28px; text-align:center; ${saldoTotal<0?'color:var(--saida);':''}">${fmtMoney(saldoTotal)}</div>
+      <p style="text-align:center; font-size:11px; color:var(--muted); margin-top:2px;">Saldo inicial do mês + tudo lançado até hoje</p>
+    </div>
+    <div class="card">
+      <h3>Hoje · ${fmtDateBR(today)}</h3>
+      <div class="grid3">
+        <div class="stat-box"><div class="n mono val-entrada">${fmtMoney(totE)}</div><div class="l">Entradas</div></div>
+        <div class="stat-box"><div class="n mono val-saida">${fmtMoney(totS)}</div><div class="l">Saídas</div></div>
+        <div class="stat-box"><div class="n mono">${fmtMoney(totE-totS)}</div><div class="l">Saldo do dia</div></div>
+      </div>
+    </div>
+    ${entryFormHTML()}
+    <div class="card">
+      <h3>Lançamentos de hoje</h3>
+      ${todays.length===0 ? '<div class="empty">Nada lançado hoje ainda.</div>' : `
+      <table>
+        <tr><th>Tipo</th><th>Categoria</th><th>Descrição</th><th class="right">Valor</th><th></th></tr>
+        ${todays.map(e=>`
+          <tr>
+            <td class="${e.type==='entrada'?'val-entrada':'val-saida'}">${e.type==='entrada'?'Entrada':'Saída'}</td>
+            <td>${e.category}</td>
+            <td>${e.description}${e.criadoPor?`<br><span style="color:var(--muted); font-size:11px;">por ${e.criadoPor}</span>`:''}</td>
+            <td class="right mono">${fmtMoney(e.amount)}</td>
+            <td class="center">
+              <button class="small-del" data-act="edit-entry" data-key="${key}" data-id="${e.id}" title="Editar">✎</button>
+              <button class="small-del" data-act="del-entry" data-key="${key}" data-id="${e.id}">✕</button>
+            </td>
+          </tr>`).join('')}
+      </table>`}
+    </div>
+  `;
+}
+
+function renderMes(){
+  const key = state.currentMonth;
+  loadMonth(key);
+  const t = monthTotals(key);
+  const entradasPorCat = {};
+  t.rows.filter(e=>e.type==='entrada').forEach(e=>{
+    entradasPorCat[e.category] = (entradasPorCat[e.category]||0) + e.amount;
+  });
+  const catList = Object.entries(entradasPorCat).sort((a,b)=>b[1]-a[1]);
+  return `
+    <div class="month-nav">
+      <button data-act="month-prev">‹</button>
+      <div class="label">${monthLabel(key)}</div>
+      <button data-act="month-next">›</button>
+    </div>
+    <div class="card">
+      <h3>Resumo do mês</h3>
+      <label>Saldo inicial do mês (transportado do mês anterior)</label>
+      <input type="number" step="0.01" id="opening-balance" value="${t.openingBalance}">
+      <div class="grid3" style="margin-top:8px;">
+        <div class="stat-box"><div class="n mono val-entrada">${fmtMoney(t.totalEntrada)}</div><div class="l">Entradas</div></div>
+        <div class="stat-box"><div class="n mono val-saida">${fmtMoney(t.totalSaida)}</div><div class="l">Saídas</div></div>
+        <div class="stat-box"><div class="n mono">${fmtMoney(t.saldoFinal)}</div><div class="l">Saldo final</div></div>
+      </div>
+      <div class="chart-wrap"><canvas id="month-chart"></canvas></div>
+    </div>
+    ${catList.length>0 ? `
+    <div class="card">
+      <h3>Entradas por origem</h3>
+      ${catList.map(([cat,val])=>`
+        <div style="display:flex; justify-content:space-between; padding:4px 0; font-size:13px;">
+          <span>${cat}</span><span class="mono val-entrada">${fmtMoney(val)}</span>
+        </div>`).join('')}
+    </div>` : ''}    ${entryFormHTML()}
+    <div class="card">
+      <h3>Lançamentos do mês</h3>
+      ${t.rows.length===0 ? '<div class="empty">Nenhum lançamento neste mês.</div>' : `
+      <table>
+        <tr><th>Data</th><th>Tipo</th><th>Descrição</th><th class="right">Valor</th><th class="right">Saldo</th><th></th></tr>
+        ${t.rows.map(e=>`
+          <tr>
+            <td>${fmtDateBR(e.date)}</td>
+            <td class="${e.type==='entrada'?'val-entrada':'val-saida'}">${e.type==='entrada'?'Entrada':'Saída'}</td>
+            <td>${e.description}<br><span style="color:var(--muted); font-size:11px;">${e.category}${e.criadoPor?' · '+e.criadoPor:''}</span></td>
+            <td class="right mono ${e.type==='entrada'?'val-entrada':'val-saida'}">${e.type==='entrada'?'+':'-'}${fmtMoney(e.amount)}</td>
+            <td class="right mono">${fmtMoney(e.saldo)}</td>
+            <td class="center">
+              <button class="small-del" data-act="edit-entry" data-key="${key}" data-id="${e.id}" title="Editar">✎</button>
+              <button class="small-del" data-act="del-entry" data-key="${key}" data-id="${e.id}">✕</button>
+            </td>
+          </tr>`).join('')}
+      </table>`}
+    </div>
+  `;
+}
+
+function drawChart(){
+  const key = state.currentMonth;
+  const t = monthTotals(key);
+  const canvas = document.getElementById('month-chart');
+  if(!canvas) return;
+  const byDay = {};
+  t.rows.forEach(e=>{
+    if(!byDay[e.date]) byDay[e.date] = {entrada:0, saida:0};
+    byDay[e.date][e.type] += e.amount;
+  });
+  const days = Object.keys(byDay).sort();
+  if(window._chartInstance) window._chartInstance.destroy();
+  window._chartInstance = new Chart(canvas, {
+    data: {
+      labels: days.map(d=>d.slice(8,10)),
+      datasets: [
+        { type:'bar', label:'Entradas', data: days.map(d=>byDay[d].entrada), backgroundColor:'#5E9468' },
+        { type:'bar', label:'Saídas', data: days.map(d=>byDay[d].saida), backgroundColor:'#BD5B50' },
+        { type:'line', label:'Saldo', data: (()=>{ let r=t.openingBalance; const arr=[]; days.forEach(d=>{ r += byDay[d].entrada - byDay[d].saida; arr.push(r); }); return arr; })(),
+          borderColor:'#C08A45', backgroundColor:'transparent', tension:.3, yAxisID:'y1' }
+      ]
+    },
+    options: {
+      responsive:true, maintainAspectRatio:false,
+      scales: {
+        y: { grid:{color:'#3A332A'}, ticks:{color:'#A89A87'} },
+        y1: { position:'right', grid:{display:false}, ticks:{color:'#C08A45'} },
+        x: { grid:{display:false}, ticks:{color:'#A89A87'} }
+      },
+      plugins: { legend:{ labels:{ color:'#EDE4D3' } } }
+    }
+  });
+}
+
+function payableFormHTML(){
+  const f = state.payableForm;
+  const precisaFuncionario = f.category === 'Salário';
+  const jaAdiantado = precisaFuncionario && f.funcionario ? sumAdiantamentos(monthKeyOf(f.dueDate), f.funcionario) : 0;
+  return `
+  <div class="card">
+    <h3>${state.editingPayable ? 'Editar conta' : 'Nova conta a pagar'}</h3>
+    <div class="grid2">
+      <div><label>Vencimento</label><input type="date" id="pf-date" value="${f.dueDate}"></div>
+      <div><label>Categoria</label>
+        <select id="pf-cat">${PAYABLE_CATS.map(c=>`<option ${c===f.category?'selected':''}>${c}</option>`).join('')}</select>
+      </div>
+    </div>
+    ${precisaFuncionario ? `
+    <label>Funcionário</label>
+    <select id="pf-func">
+      <option value="">Selecione...</option>
+      ${FUNCIONARIOS.map(n=>`<option ${n===f.funcionario?'selected':''}>${n}</option>`).join('')}
+    </select>
+    ${f.funcionario ? `<p style="font-size:11.5px; color:var(--amber); margin:-4px 0 10px;">${f.funcionario} já recebeu ${fmtMoney(jaAdiantado)} em adiantamento neste mês. Lance aqui só o valor que ainda falta pagar.</p>` : ''}
+    ` : ''}
+    <label>Descrição</label>
+    <input type="text" id="pf-desc" placeholder="Ex: Fornecedor Barber Shopping, salário Juan..." value="${f.description}">
+    <label>Valor (R$)</label>
+    <input type="number" id="pf-amount" step="0.01" min="0" placeholder="0,00" value="${f.amount}">
+    <button class="btn btn-primary" data-act="save-payable" style="width:100%;">${state.editingPayable ? 'Salvar alteração' : 'Adicionar conta'}</button>
+    ${state.editingPayable ? `<button class="btn btn-ghost" data-act="cancel-edit-payable" style="width:100%; margin-top:8px;">Cancelar edição</button>` : ''}
+  </div>`;
+}
+
+function restanteAPagar(p, key){
+  if(p.category==='Salário' && p.funcionario){
+    const adiantado = sumAdiantamentos(key, p.funcionario);
+    return Math.max(0, p.amount - adiantado);
   }
-};
-
-function showToast(msg){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
+  return p.amount;
 }
 
-renderServicos();
-updateUI();
+function renderContas(){
+  const key = state.currentMonth;
+  loadPayables(key);
+  const list = (state.payablesCache[key]||[]).sort((a,b)=>a.dueDate.localeCompare(b.dueDate));
+  const totalPendente = list.filter(p=>p.status==='pendente').reduce((s,p)=>s+restanteAPagar(p,key),0);
+  const totalPago = list.filter(p=>p.status==='pago').reduce((s,p)=>s+p.amount,0);
+  const adiantamentosPorFunc = FUNCIONARIOS
+    .map(n=>({nome:n, valor: sumAdiantamentos(key, n)}))
+    .filter(x=>x.valor>0);
+  return `
+    <div class="month-nav">
+      <button data-act="month-prev">‹</button>
+      <div class="label">${monthLabel(key)}</div>
+      <button data-act="month-next">›</button>
+    </div>
+    <div class="card">
+      <div class="grid2">
+        <div class="stat-box"><div class="n mono" style="color:var(--amber);">${fmtMoney(totalPendente)}</div><div class="l">Pendente</div></div>
+        <div class="stat-box"><div class="n mono val-entrada">${fmtMoney(totalPago)}</div><div class="l">Pago</div></div>
+      </div>
+    </div>
+    ${adiantamentosPorFunc.length>0 ? `
+    <div class="card">
+      <h3>Adiantamentos já dados este mês</h3>
+      ${adiantamentosPorFunc.map(x=>`
+        <div style="display:flex; justify-content:space-between; padding:4px 0; font-size:13px;">
+          <span>${x.nome}</span><span class="mono" style="color:var(--amber);">${fmtMoney(x.valor)}</span>
+        </div>`).join('')}
+      <p style="font-size:11px; color:var(--muted); margin-top:8px;">Isso já está descontado automaticamente do valor pendente de cada conta de salário abaixo.</p>
+    </div>` : ''}
+    ${payableFormHTML()}
+    <div class="card">
+      <h3>Contas do mês</h3>
+      ${list.length===0 ? '<div class="empty">Nenhuma conta cadastrada neste mês.</div>' : `
+      <table>
+        <tr><th>Venc.</th><th>Descrição</th><th class="right">Valor</th><th class="center">Status</th><th></th></tr>
+        ${list.map(p=>{
+          const restante = restanteAPagar(p,key);
+          const temDesconto = p.status==='pendente' && restante !== p.amount;
+          return `
+          <tr>
+            <td>${fmtDateBR(p.dueDate)}</td>
+            <td>${p.description}<br><span style="color:var(--muted); font-size:11px;">${p.category}${p.criadoPor?' · '+p.criadoPor:''}</span></td>
+            <td class="right mono">
+              ${temDesconto ? `<span style="text-decoration:line-through; color:var(--muted); font-size:11px;">${fmtMoney(p.amount)}</span><br><span style="color:var(--amber);">${fmtMoney(restante)}</span>` : fmtMoney(p.amount)}
+            </td>
+            <td class="center">
+              <span class="badge ${p.status==='pago'?'badge-pago':'badge-pendente'}" style="cursor:pointer;" data-act="toggle-paid" data-key="${key}" data-id="${p.id}">
+                ${p.status==='pago'?'Pago':'Pendente'}
+              </span>
+            </td>
+            <td class="center"><button class="small-del" data-act="edit-payable" data-key="${key}" data-id="${p.id}" title="Editar">✎</button><button class="small-del" data-act="del-payable" data-key="${key}" data-id="${p.id}">✕</button></td>
+          </tr>`;}).join('')}
+      </table>`}
+    </div>
+  `;
+}
+
+function renderExtrato(){
+  const key = state.currentMonth;
+  const [y,m] = key.split('-');
+  const lastDay = new Date(parseInt(y), parseInt(m), 0).getDate();
+  if(!state.extrato.start) state.extrato.start = key+'-01';
+  if(!state.extrato.end) state.extrato.end = key+'-'+String(lastDay).padStart(2,'0');
+
+  let statementHTML = '';
+  if(state.extrato.result){
+    const r = state.extrato.result;
+    statementHTML = `
+    <div class="statement" id="statement-area">
+      <h2>Tribo Barbearia · Centro</h2>
+      <div class="sub">Extrato de caixa · ${fmtDateBR(r.start)} a ${fmtDateBR(r.end)}</div>
+      <table>
+        <tr><th>Data</th><th>Tipo</th><th>Descrição</th><th class="right">Valor</th></tr>
+        ${r.rows.map(e=>`
+          <tr>
+            <td>${fmtDateBR(e.date)}</td>
+            <td class="${e.type==='entrada'?'val-entrada':'val-saida'}">${e.type==='entrada'?'Entrada':'Saída'}</td>
+            <td>${e.description}</td>
+            <td class="right ${e.type==='entrada'?'val-entrada':'val-saida'}">${e.type==='entrada'?'+':'-'}${fmtMoney(e.amount)}</td>
+          </tr>`).join('')}
+      </table>
+      <div style="margin-top:14px; display:flex; justify-content:space-between; font-weight:600;">
+        <span>Total de entradas: ${fmtMoney(r.totalEntrada)}</span>
+        <span>Total de saídas: ${fmtMoney(r.totalSaida)}</span>
+        <span>Saldo do período: ${fmtMoney(r.totalEntrada - r.totalSaida)}</span>
+      </div>
+      <div style="margin-top:20px; font-size:10px; color:#777;">Gerado em ${fmtDateBR(todayISO())}</div>
+    </div>
+    <button class="btn btn-primary no-print" data-act="print-statement" style="margin-top:12px;">Imprimir / salvar como PDF</button>
+    `;
+  }
+
+  return `
+    <div class="card">
+      <h3>Gerar extrato por período</h3>
+      <div class="grid2">
+        <div><label>De</label><input type="date" id="ext-start" value="${state.extrato.start}"></div>
+        <div><label>Até</label><input type="date" id="ext-end" value="${state.extrato.end}"></div>
+      </div>
+      <button class="btn btn-primary" data-act="gen-extrato" style="width:100%;">Gerar extrato</button>
+    </div>
+    ${statementHTML}
+  `;
+}
+
+/* ---------- events ---------- */
+function attachEvents(){
+  document.getElementById('tabs').onclick = (e)=>{
+    const logoutBtn = e.target.closest('[data-act="logout"]');
+    if(logoutBtn){ doLogout(); return; }
+    const b = e.target.closest('[data-tab]');
+    if(!b) return;
+    state.activeTab = b.dataset.tab;
+    render();
+  };
+
+  const c = document.getElementById('content');
+  c.onclick = async (e)=>{
+    const b = e.target.closest('[data-act]');
+    if(!b) return;
+    const act = b.dataset.act;
+
+    if(act==='do-login'){
+      const user = document.getElementById('login-user').value.trim().toLowerCase();
+      const pass = document.getElementById('login-pass').value;
+      if(doLogin(user, pass)){
+        state.loginError = null;
+        await boot();
+      } else {
+        state.loginError = 'Usuário ou senha incorretos.';
+        render();
+      }
+      return;
+    }
+    if(act==='set-type'){
+      state.entryForm.type = b.dataset.val;
+      state.entryForm.category = (b.dataset.val==='entrada'?ENTRADA_CATS:SAIDA_CATS)[0];
+      render();
+    }
+    else if(act==='save-entry'){
+      const date = document.getElementById('ef-date').value;
+      const category = document.getElementById('ef-cat').value;
+      const description = document.getElementById('ef-desc').value;
+      const amount = document.getElementById('ef-amount').value;
+      const funcEl = document.getElementById('ef-func');
+      const funcionario = funcEl ? funcEl.value : '';
+      if(!date || !amount || parseFloat(amount)<=0){ alert('Preencha data e um valor válido.'); return; }
+      if(state.editingEntry){
+        await updateEntry(state.editingEntry.key, state.editingEntry.id, { type: state.entryForm.type, date, category, description, amount, funcionario });
+        state.editingEntry = null;
+      } else {
+        await addEntry({ type: state.entryForm.type, date, category, description, amount, funcionario });
+      }
+      state.entryForm.description = ''; state.entryForm.amount = ''; state.entryForm.funcionario = '';
+    }
+    else if(act==='edit-entry'){
+      const key = b.dataset.key, id = b.dataset.id;
+      await loadMonth(key);
+      const entry = state.monthCache[key].entries.find(e=>e.id===id);
+      if(!entry) return;
+      state.editingEntry = { key, id };
+      state.entryForm = { type: entry.type, date: entry.date, category: entry.category, description: entry.description, amount: entry.amount, funcionario: entry.funcionario || '' };
+      render();
+    }
+    else if(act==='cancel-edit-entry'){
+      state.editingEntry = null;
+      state.entryForm = { type:'entrada', date: todayISO(), category: ENTRADA_CATS[0], description:'', amount:'', funcionario:'' };
+      render();
+    }
+    else if(act==='del-entry'){ await deleteEntry(b.dataset.key, b.dataset.id); }
+    else if(act==='month-prev'){ state.currentMonth = shiftMonth(state.currentMonth,-1); await loadMonth(state.currentMonth); await loadPayables(state.currentMonth); render(); }
+    else if(act==='month-next'){ state.currentMonth = shiftMonth(state.currentMonth,1); await loadMonth(state.currentMonth); await loadPayables(state.currentMonth); render(); }
+    else if(act==='save-payable'){
+      const dueDate = document.getElementById('pf-date').value;
+      const category = document.getElementById('pf-cat').value;
+      const description = document.getElementById('pf-desc').value;
+      const amount = document.getElementById('pf-amount').value;
+      const funcEl = document.getElementById('pf-func');
+      const funcionario = funcEl ? funcEl.value : '';
+      if(!dueDate || !amount || parseFloat(amount)<=0){ alert('Preencha vencimento e um valor válido.'); return; }
+      if(state.editingPayable){
+        await updatePayable(state.editingPayable.key, state.editingPayable.id, { dueDate, category, description, amount, funcionario });
+        state.editingPayable = null;
+      } else {
+        await addPayable({ dueDate, category, description, amount, funcionario });
+      }
+      state.payableForm.description=''; state.payableForm.amount=''; state.payableForm.funcionario='';
+    }
+    else if(act==='edit-payable'){
+      const key = b.dataset.key, id = b.dataset.id;
+      await loadPayables(key);
+      const p = state.payablesCache[key].find(x=>x.id===id);
+      if(!p) return;
+      state.editingPayable = { key, id };
+      state.payableForm = { dueDate: p.dueDate, category: p.category, description: p.description, amount: p.amount, funcionario: p.funcionario || '' };
+      render();
+    }
+    else if(act==='cancel-edit-payable'){
+      state.editingPayable = null;
+      state.payableForm = { dueDate: todayISO(), category: PAYABLE_CATS[0], description:'', amount:'', funcionario:'' };
+      render();
+    }
+    else if(act==='del-payable'){ await deletePayable(b.dataset.key, b.dataset.id); }
+    else if(act==='toggle-paid'){ await togglePaid(b.dataset.key, b.dataset.id); }
+    else if(act==='gen-extrato'){
+      const start = document.getElementById('ext-start').value;
+      const end = document.getElementById('ext-end').value;
+      if(!start || !end || start>end){ alert('Verifique as datas selecionadas.'); return; }
+      state.extrato.start = start; state.extrato.end = end;
+      let key = monthKeyOf(start);
+      const endKey = monthKeyOf(end);
+      const rows = [];
+      while(true){
+        await loadMonth(key);
+        (state.monthCache[key].entries||[]).forEach(e=>{
+          if(e.date>=start && e.date<=end) rows.push(e);
+        });
+        if(key===endKey) break;
+        key = shiftMonth(key,1);
+      }
+      rows.sort((a,b)=>a.date.localeCompare(b.date));
+      const totalEntrada = rows.filter(e=>e.type==='entrada').reduce((s,e)=>s+e.amount,0);
+      const totalSaida = rows.filter(e=>e.type==='saida').reduce((s,e)=>s+e.amount,0);
+      state.extrato.result = { start, end, rows, totalEntrada, totalSaida };
+      render();
+    }
+    else if(act==='print-statement'){ window.print(); }
+  };
+
+  const loginPass = document.getElementById('login-pass');
+  if(loginPass){
+    loginPass.onkeydown = (e)=>{ if(e.key==='Enter') c.querySelector('[data-act="do-login"]').click(); };
+  }
+
+  const ob = document.getElementById('opening-balance');
+  if(ob){ ob.onchange = async ()=>{ await updateOpeningBalance(state.currentMonth, ob.value); }; }
+
+  ['ef-desc','ef-amount','pf-desc','pf-amount'].forEach(id=>{
+    const elm = document.getElementById(id);
+    if(elm) elm.oninput = ()=>{
+      if(id==='ef-desc') state.entryForm.description = elm.value;
+      if(id==='ef-amount') state.entryForm.amount = elm.value;
+      if(id==='pf-desc') state.payableForm.description = elm.value;
+      if(id==='pf-amount') state.payableForm.amount = elm.value;
+    };
+  });
+
+  const efCat = document.getElementById('ef-cat');
+  if(efCat) efCat.onchange = ()=>{ state.entryForm.category = efCat.value; state.entryForm.funcionario=''; render(); };
+  const efFunc = document.getElementById('ef-func');
+  if(efFunc) efFunc.onchange = ()=>{ state.entryForm.funcionario = efFunc.value; render(); };
+  const pfCat = document.getElementById('pf-cat');
+  if(pfCat) pfCat.onchange = ()=>{ state.payableForm.category = pfCat.value; state.payableForm.funcionario=''; render(); };
+  const pfFunc = document.getElementById('pf-func');
+  if(pfFunc) pfFunc.onchange = ()=>{ state.payableForm.funcionario = pfFunc.value; render(); };
+}
+
+/* ---------- boot ---------- */
+async function boot(){
+  checkSavedLogin();
+  if(!state.currentUser){
+    render();
+    return;
+  }
+  document.getElementById('content').innerHTML = '<div class="empty">Conectando...</div>';
+  if(!db){
+    try{ await initFirebase(); } catch(e){ return; }
+  }
+  await loadMonth(state.currentMonth);
+  await loadPayables(state.currentMonth);
+  state.loaded = true;
+  render();
+}
+boot();
 </script>
 </body>
 </html>
